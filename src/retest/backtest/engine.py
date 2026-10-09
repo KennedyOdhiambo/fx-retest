@@ -32,8 +32,10 @@ class BacktestParams:
     def from_config(cls, pair: str | None = None) -> BacktestParams:
         bt = get_config().section("backtest")
         sizes = bt.get("pip_sizes", {})
-        pip_size = float(sizes.get(pair, bt.get("pip_size", 0.0001))) if pair else float(
-            bt.get("pip_size", 0.0001)
+        pip_size = (
+            float(sizes.get(pair, bt.get("pip_size", 0.0001)))
+            if pair
+            else float(bt.get("pip_size", 0.0001))
         )
         return cls(
             spread_pips=float(bt.get("spread_pips", 1.0)),
