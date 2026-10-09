@@ -4,8 +4,8 @@ from dataclasses import replace
 
 import pandas as pd
 
-from sfp_reversion.data.schema import validate_ohlc
-from sfp_reversion.signals.retest import (
+from retest.data.schema import validate_ohlc
+from retest.signals.retest import (
     RetestParams,
     engulfing,
     fib_grid,

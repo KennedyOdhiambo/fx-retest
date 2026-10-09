@@ -3,14 +3,14 @@
 import numpy as np
 import pandas as pd
 
-from sfp_reversion.validation.sensitivity import sweep_parameter
-from sfp_reversion.validation.significance import (
+from retest.validation.sensitivity import sweep_parameter
+from retest.validation.significance import (
     deflated_sharpe,
     sharpe_confidence_interval,
     sharpe_ratio,
     significance_report,
 )
-from sfp_reversion.validation.walk_forward import walk_forward_evaluate, walk_forward_windows
+from retest.validation.walk_forward import walk_forward_evaluate, walk_forward_windows
 
 
 def test_windows_tile_exactly() -> None:

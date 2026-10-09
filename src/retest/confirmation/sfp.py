@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from sfp_reversion.levels.detection import atr_series
+from retest.levels.detection import atr_series
 
 
 def detect_sfp(

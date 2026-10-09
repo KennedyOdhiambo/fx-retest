@@ -2,9 +2,9 @@
 
 import pandas as pd
 
-from sfp_reversion.backtest.engine import BacktestParams
-from sfp_reversion.data.schema import validate_ohlc
-from sfp_reversion.validation.random_baseline import (
+from retest.backtest.engine import BacktestParams
+from retest.data.schema import validate_ohlc
+from retest.validation.random_baseline import (
     baseline_passes,
     random_signals,
     run_random_baseline,

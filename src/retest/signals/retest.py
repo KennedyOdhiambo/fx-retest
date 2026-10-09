@@ -1,4 +1,4 @@
-"""Setup B signals (philosophy.md): breakout-then-return off daily levels.
+"""Retest signals: breakout-then-return off daily levels (strategy.md).
 
 A level breaks (H1 close beyond tolerance), then price comes straight back
 within ``max_break_return_bars``. Buy the return to broken resistance, sell
@@ -17,9 +17,9 @@ from typing import Any
 
 import pandas as pd
 
-from sfp_reversion.config import get_config
-from sfp_reversion.confirmation.sfp import detect_sfp
-from sfp_reversion.levels.detection import atr_series, detect_levels
+from retest.config import get_config
+from retest.confirmation.sfp import detect_sfp
+from retest.levels.detection import atr_series, detect_levels
 
 
 @dataclass
@@ -303,7 +303,7 @@ def generate_retest_signals(
             level, hourly, i0, params.touch_tolerance_atr, params.atr_period
         )
         if bpos is None:
-            continue  # never broke: not a Setup B level
+            continue  # never broke: not a retest level
         # break direction decides the trade (resistance broken up -> long)
         if level.kind == "resistance":
             direction = "long"

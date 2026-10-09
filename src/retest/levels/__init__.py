@@ -1,6 +1,6 @@
 """Levels package: swing detection, clustering, and obviousness filtering."""
 
-from sfp_reversion.levels.detection import (
+from retest.levels.detection import (
     Level,
     atr_series,
     detect_levels,

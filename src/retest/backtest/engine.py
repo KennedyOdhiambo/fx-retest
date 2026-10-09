@@ -1,4 +1,4 @@
-"""Setup A backtest: market/limit entries, stop/target/warning exits, costs, sizing.
+"""Backtest engine: market/limit entries, stop/target/warning exits, costs, sizing.
 
 A signal at bar ``t`` resolves on the execution frame (H1 or M5): market
 orders fill at bar ``t+1``'s open; limit orders fill at the limit price if a
@@ -15,7 +15,7 @@ from typing import Any
 
 import pandas as pd
 
-from sfp_reversion.config import get_config
+from retest.config import get_config
 
 
 @dataclass

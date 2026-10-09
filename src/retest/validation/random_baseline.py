@@ -12,8 +12,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from sfp_reversion.backtest.engine import BacktestParams, run_backtest
-from sfp_reversion.levels.detection import atr_series
+from retest.backtest.engine import BacktestParams, run_backtest
+from retest.levels.detection import atr_series
 
 
 def random_signals(

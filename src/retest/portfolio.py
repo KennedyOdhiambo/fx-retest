@@ -13,11 +13,10 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from sfp_reversion.backtest.engine import BacktestParams, run_backtest
-from sfp_reversion.report.metrics_table import metrics_table
-from sfp_reversion.signals.retest import RetestParams, generate_retest_signals
-from sfp_reversion.signals.sfp import SfpParams, generate_sfp_signals
-from sfp_reversion.validation.significance import significance_report
+from retest.backtest.engine import BacktestParams, run_backtest
+from retest.report.metrics_table import metrics_table
+from retest.signals.retest import RetestParams, generate_retest_signals
+from retest.validation.significance import significance_report
 
 
 @dataclass
@@ -31,22 +30,17 @@ class PortfolioResult:
 
 def run_portfolio(
     frames: dict[str, tuple[pd.DataFrame, pd.DataFrame]],
-    signal_params: SfpParams | RetestParams | None = None,
+    signal_params: RetestParams | None = None,
     backtest_params: BacktestParams | None = None,
     starting_equity: float = 10000.0,
     exec_frames: dict[str, pd.DataFrame] | None = None,
 ) -> PortfolioResult:
-    if signal_params is None:
-        signal_params = SfpParams.from_config()
-    generate = (
-        generate_retest_signals if isinstance(signal_params, RetestParams) else generate_sfp_signals
-    )
-    backtest_params = backtest_params or BacktestParams.from_config()
+    signal_params = signal_params or RetestParams.from_config()
     exec_frames = exec_frames or {}
     per_symbol: dict[str, pd.DataFrame] = {}
     for symbol, (hourly, daily) in frames.items():
-        sig = generate(hourly, daily, signal_params)
-        bt = backtest_params or BacktestParams.from_config(symbol)
+        sig = generate_retest_signals(hourly, daily, signal_params)
+        bt = backtest_params if backtest_params is not None else BacktestParams.from_config(symbol)
         res = run_backtest(exec_frames.get(symbol, hourly), sig, bt)
         trades = res.trades_df.copy()
         trades["symbol"] = symbol

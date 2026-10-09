@@ -2,8 +2,8 @@
 
 import pandas as pd
 
-from sfp_reversion.confirmation.sfp import detect_sfp
-from sfp_reversion.data.schema import validate_ohlc
+from retest.confirmation.sfp import detect_sfp
+from retest.data.schema import validate_ohlc
 
 LEVEL = 1.05
 

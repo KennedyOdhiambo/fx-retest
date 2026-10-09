@@ -14,8 +14,8 @@ from typing import Any
 
 import pandas as pd
 
-from sfp_reversion.config import get_config
-from sfp_reversion.data.schema import concat_ohlc, empty_ohlc, validate_ohlc
+from retest.config import get_config
+from retest.data.schema import concat_ohlc, empty_ohlc, validate_ohlc
 
 log = logging.getLogger(__name__)
 
@@ -88,7 +88,7 @@ def fetch_tradingview(
     """
     if granularity not in _TVWS_INTERVALS:
         raise ValueError(f"Unsupported granularity for TradingView: {granularity}")
-    from sfp_reversion.data.tvws import fetch_history, to_utc
+    from retest.data.tvws import fetch_history, to_utc
 
     symbol, exchange = tv_symbol(pair)
     try:

@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from sfp_reversion.data.tvws import _frame, _series_bars, _split_frames, fetch_history
+from retest.data.tvws import _frame, _series_bars, _split_frames, fetch_history
 
 
 def _update(bars: list[list]) -> str:

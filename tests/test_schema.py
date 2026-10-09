@@ -3,7 +3,7 @@
 import pandas as pd
 import pytest
 
-from sfp_reversion.data.schema import concat_ohlc, empty_ohlc, validate_ohlc
+from retest.data.schema import concat_ohlc, empty_ohlc, validate_ohlc
 
 
 def _frame(**overrides) -> pd.DataFrame:

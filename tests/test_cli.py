@@ -3,9 +3,9 @@
 import pandas as pd
 import pytest
 
-import sfp_reversion.cli as cli
-from sfp_reversion.cli import main
-from sfp_reversion.data.schema import validate_ohlc
+import retest.cli as cli
+from retest.cli import main
+from retest.data.schema import validate_ohlc
 
 
 def _frame(n: int = 60, start: str = "2024-01-01", freq: str = "h") -> pd.DataFrame:
@@ -38,11 +38,6 @@ def test_signals(stubbed: None, capsys: pytest.CaptureFixture) -> None:
     assert "signals" in capsys.readouterr().out
 
 
-def test_signals_setup_b(stubbed: None, capsys: pytest.CaptureFixture) -> None:
-    assert main(["signals", "EUR_USD", "--setup", "B"]) == 0
-    assert "signals" in capsys.readouterr().out
-
-
 def test_backtest(stubbed: None, capsys: pytest.CaptureFixture) -> None:
     assert main(["backtest", "EUR_USD", "--n-baseline", "2", "--out-dir", "rep"]) == 0
     out = capsys.readouterr().out
@@ -50,8 +45,11 @@ def test_backtest(stubbed: None, capsys: pytest.CaptureFixture) -> None:
 
 
 def test_validate_sweep(stubbed: None, capsys: pytest.CaptureFixture) -> None:
-    assert main(["validate", "EUR_USD", "--parameter", "wick_atr", "--values", "0.05", "0.1"]) == 0
-    assert "wick_atr=" in capsys.readouterr().out
+    assert (
+        main(["validate", "EUR_USD", "--parameter", "fib_proximity_atr", "--values", "0.1", "0.2"])
+        == 0
+    )
+    assert "fib_proximity_atr=" in capsys.readouterr().out
 
 
 def test_validate_windows(stubbed: None, capsys: pytest.CaptureFixture) -> None:

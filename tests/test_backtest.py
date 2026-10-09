@@ -3,8 +3,8 @@
 import pandas as pd
 import pytest
 
-from sfp_reversion.backtest.engine import BacktestParams, run_backtest
-from sfp_reversion.data.schema import validate_ohlc
+from retest.backtest.engine import BacktestParams, run_backtest
+from retest.data.schema import validate_ohlc
 
 FREE = BacktestParams(
     spread_pips=0.0,

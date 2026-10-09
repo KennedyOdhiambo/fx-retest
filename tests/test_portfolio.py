@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from sfp_reversion.portfolio import combine_trades, portfolio_equity, run_portfolio
+from retest.portfolio import combine_trades, portfolio_equity, run_portfolio
 
 
 def _trades(pnls: list[float], start: str, direction: str = "long") -> pd.DataFrame:

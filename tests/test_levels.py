@@ -5,8 +5,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from sfp_reversion.data.schema import validate_ohlc
-from sfp_reversion.levels.detection import atr_series, detect_levels, swing_points
+from retest.data.schema import validate_ohlc
+from retest.levels.detection import atr_series, detect_levels, swing_points
 
 LB = 2  # compact lookback for hand-labeled frames
 
@@ -84,7 +84,7 @@ def test_highs_and_lows_never_merge() -> None:
 
 
 def test_filter_min_swings_keeps_only_tested_shelves() -> None:
-    from sfp_reversion.levels.detection import filter_levels
+    from retest.levels.detection import filter_levels
 
     df = _frame(
         [1.10] * 6 + [1.08, 1.05, 1.08] + [1.10] * 6 + [1.0805, 1.0505, 1.0805] + [1.10] * 6
@@ -96,7 +96,7 @@ def test_filter_min_swings_keeps_only_tested_shelves() -> None:
 
 
 def test_filter_extremes_drops_stale_shelf() -> None:
-    from sfp_reversion.levels.detection import filter_levels
+    from retest.levels.detection import filter_levels
 
     lows = [1.10] * 6 + [1.08, 1.05, 1.08] + [1.10 + 0.002 * i for i in range(25)]
     df = _frame(lows)
@@ -108,7 +108,7 @@ def test_filter_extremes_drops_stale_shelf() -> None:
 
 
 def test_filter_spacing_drops_weaker_neighbor() -> None:
-    from sfp_reversion.levels.detection import filter_levels
+    from retest.levels.detection import filter_levels
 
     df = _frame([1.10] * 6 + [1.08, 1.05, 1.08] + [1.10] * 6 + [1.08, 1.04, 1.08] + [1.10] * 6)
     levels = detect_levels(df, lookback=LB, atr_period=3, cluster_ticks=10, tick_size=0.0001)

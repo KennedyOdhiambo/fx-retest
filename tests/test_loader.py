@@ -7,8 +7,8 @@ from typing import Any
 import pandas as pd
 import pytest
 
-from sfp_reversion.data.loader import cache_path, load_ohlc, tv_symbol
-from sfp_reversion.data.schema import empty_ohlc
+from retest.data.loader import cache_path, load_ohlc, tv_symbol
+from retest.data.schema import empty_ohlc
 
 
 def _bars(start: str, n: int, price: float = 1.1) -> pd.DataFrame:
@@ -115,6 +115,6 @@ def test_empty_frame_helper() -> None:
 
 
 def test_m5_is_supported_interval() -> None:
-    from sfp_reversion.data.loader import _TVWS_INTERVALS
+    from retest.data.loader import _TVWS_INTERVALS
 
     assert _TVWS_INTERVALS["M5"] == "5"

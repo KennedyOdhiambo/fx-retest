@@ -1,4 +1,4 @@
-"""CLI: fetch / signals / backtest / validate. End-to-end entry point."""
+"""CLI: fetch / signals / backtest / validate / portfolio."""
 
 from __future__ import annotations
 
@@ -10,18 +10,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from sfp_reversion.backtest.engine import BacktestParams, run_backtest
-from sfp_reversion.config import get_config, setup_logging
-from sfp_reversion.data.loader import load_ohlc
-from sfp_reversion.portfolio import run_portfolio
-from sfp_reversion.report import metrics_table, plot_equity_curve
-from sfp_reversion.signals import (
-    RetestParams,
-    SfpParams,
-    generate_retest_signals,
-    generate_sfp_signals,
-)
-from sfp_reversion.validation import (
+from retest.backtest.engine import BacktestParams, run_backtest
+from retest.config import get_config, setup_logging
+from retest.data.loader import load_ohlc
+from retest.portfolio import run_portfolio
+from retest.report import metrics_table, plot_equity_curve
+from retest.signals import RetestParams, generate_retest_signals
+from retest.validation import (
     baseline_passes,
     run_random_baseline,
     sweep_parameter,
@@ -30,7 +25,7 @@ from sfp_reversion.validation import (
 
 
 def _parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="sfp-reversion", description=__doc__)
+    p = argparse.ArgumentParser(prog="retest", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
 
     f = sub.add_parser("fetch", help="Pull OHLC into the local cache")
@@ -39,9 +34,8 @@ def _parser() -> argparse.ArgumentParser:
     f.add_argument("--start", default=None, help="YYYY-MM-DD")
     f.add_argument("--end", default=None, help="YYYY-MM-DD")
 
-    s = sub.add_parser("signals", help="Generate signals (Setup A SFP / Setup B retest)")
+    s = sub.add_parser("signals", help="Generate breakout-then-return signals")
     s.add_argument("pair")
-    s.add_argument("--setup", default="A", help="A | B")
     s.add_argument("--out", default=None, help="CSV output path")
     s.add_argument("--start", default=None, help="YYYY-MM-DD")
     s.add_argument("--end", default=None, help="YYYY-MM-DD")
@@ -53,7 +47,6 @@ def _parser() -> argparse.ArgumentParser:
     b.add_argument("--out-dir", default=None)
     b.add_argument("--start", default=None, help="YYYY-MM-DD")
     b.add_argument("--end", default=None, help="YYYY-MM-DD")
-    b.add_argument("--setup", default="A", help="A | B")
 
     v = sub.add_parser("validate", help="Walk-forward + optional parameter sweep")
     v.add_argument("pair")
@@ -63,7 +56,6 @@ def _parser() -> argparse.ArgumentParser:
     v.add_argument("--oos-years", type=float, default=None)
     v.add_argument("--start", default=None, help="YYYY-MM-DD")
     v.add_argument("--end", default=None, help="YYYY-MM-DD")
-    v.add_argument("--setup", default="A", help="A | B")
 
     u = sub.add_parser("portfolio", help="Universe signals + pooled trades + equity")
     u.add_argument("--pairs", nargs="+", default=None)
@@ -71,7 +63,6 @@ def _parser() -> argparse.ArgumentParser:
     u.add_argument("--start", default=None, help="YYYY-MM-DD")
     u.add_argument("--end", default=None, help="YYYY-MM-DD")
     u.add_argument("--out-dir", default=None)
-    u.add_argument("--setup", default="A", help="A | B")
     return p
 
 
@@ -82,20 +73,6 @@ def _dt(value: str | None) -> datetime | None:
 def _frames(pair: str) -> tuple:
     """Full history always: indicators and levels need their warmup."""
     return load_ohlc(pair, granularity="H1"), load_ohlc(pair)
-
-
-def _signal_fn(setup: str):
-    """Setup dispatch: A = SFP market/limit, B = breakout-then-return limits."""
-    if (setup or "A").upper() == "B":
-        return RetestParams.from_config(), generate_retest_signals
-    return SfpParams.from_config(), generate_sfp_signals
-
-
-def _exec_frame(pair: str, params) -> tuple:
-    """Execution frame: M5 when refining entries, else H1."""
-    if getattr(params, "refine_entry", False):
-        return load_ohlc(pair, granularity="M5")
-    return load_ohlc(pair, granularity="H1")
 
 
 def _in_window(sig, start: str | None, end: str | None):
@@ -114,8 +91,8 @@ def _cmd_fetch(args: argparse.Namespace) -> int:
 
 def _cmd_signals(args: argparse.Namespace) -> int:
     hourly, daily = _frames(args.pair)
-    sig_params, generate = _signal_fn(args.setup)
-    sig = _in_window(generate(hourly, daily, sig_params), args.start, args.end)
+    params = RetestParams.from_config()
+    sig = _in_window(generate_retest_signals(hourly, daily, params), args.start, args.end)
     print(f"{len(sig)} signals")
     if not sig.empty:
         print(sig.to_string())
@@ -128,16 +105,15 @@ def _cmd_signals(args: argparse.Namespace) -> int:
 def _cmd_backtest(args: argparse.Namespace) -> int:
     cfg = get_config()
     hourly, daily = _frames(args.pair)
-    sig_params, generate = _signal_fn(args.setup)
+    sig_params = RetestParams.from_config()
     params = BacktestParams.from_config(args.pair)
-    sig = _in_window(generate(hourly, daily, sig_params), args.start, args.end)
-    exec_df = _exec_frame(args.pair, sig_params)
-    res = run_backtest(exec_df, sig, params)
+    sig = _in_window(generate_retest_signals(hourly, daily, sig_params), args.start, args.end)
+    res = run_backtest(hourly, sig, params)
     print(metrics_table(res.trades_df, res.equity_curve, params.min_equity).to_string(index=False))
     out_dir = Path(args.out_dir or cfg.get("report.output_dir", "reports"))
     curve = plot_equity_curve(res.equity_curve, out_dir / f"{args.pair}_equity.png")
     print(f"equity curve: {curve}")
-    pnls = run_random_baseline(exec_df, max(len(sig), 1), params, args.n_baseline, args.seed)
+    pnls = run_random_baseline(hourly, max(len(sig), 1), params, args.n_baseline, args.seed)
     passed, s = baseline_passes(pnls)
     print(f"random baseline: mean={s['mean']:.2f} p={s['p']:.3f} -> {'PASS' if passed else 'FAIL'}")
     return 0 if passed else 2
@@ -147,16 +123,15 @@ def _cmd_validate(args: argparse.Namespace) -> int:
     cfg = get_config()
     wf = cfg.section("validation").get("walk_forward", {})
     hourly, daily = _frames(args.pair)
-    params, generate = _signal_fn(args.setup)
-    bt = BacktestParams.from_config(args.pair)
+    params, bt = RetestParams.from_config(), BacktestParams.from_config(args.pair)
 
     if args.parameter:
-        values = args.values or [0.05, 0.1, 0.15, 0.2]
+        values = args.values or [0.1, 0.2, 0.3]
 
         def run(v: float) -> float:
             p = replace(params, **{args.parameter: v})
-            sig = generate(hourly, daily, p)
-            res = run_backtest(_exec_frame(args.pair, p), sig, bt)
+            sig = generate_retest_signals(hourly, daily, p)
+            res = run_backtest(hourly, sig, bt)
             return float(res.trades_df["pnl"].sum()) if not res.trades_df.empty else 0.0
 
         r = sweep_parameter(list(values), run)
@@ -165,22 +140,14 @@ def _cmd_validate(args: argparse.Namespace) -> int:
         print(f"best={r.best_value} robust={'yes' if r.robust else 'NO'}")
         return 0
 
-    m5_full = (
-        load_ohlc(args.pair, granularity="M5") if getattr(params, "refine_entry", False) else None
-    )
-
     def score_fn(is_h, is_d, oos_h, oos_d) -> tuple[float, int]:
         import pandas as pd
 
         h = pd.concat([is_h, oos_h])
         d = pd.concat([is_d, oos_d]) if not is_d.empty else oos_d
-        sig = generate(h, d, params)
+        sig = generate_retest_signals(h, d, params)
         sig = sig[sig["timestamp"] >= oos_h.index[0]]
-        if m5_full is not None:
-            exec_df = m5_full[(m5_full.index >= h.index[0]) & (m5_full.index <= oos_h.index[-1])]
-        else:
-            exec_df = h
-        res = run_backtest(exec_df, sig, bt)
+        res = run_backtest(h, sig, bt)
         n = len(res.trades_df)
         return (float(res.trades_df["pnl"].sum()) if n else 0.0, n)
 
@@ -207,19 +174,16 @@ def _cmd_portfolio(args: argparse.Namespace) -> int:
     out_dir = Path(args.out_dir or cfg.get("report.output_dir", "reports"))
     out_dir.mkdir(parents=True, exist_ok=True)
     frames = {}
-    exec_frames = {}
-    sig_params, generate = _signal_fn(args.setup)
     for pair in pairs:
         try:
             hourly = load_ohlc(pair, _dt(args.start), _dt(args.end), granularity=args.granularity)
             daily = load_ohlc(pair, _dt(args.start), _dt(args.end))
-            exec_frames[pair] = _exec_frame(pair, sig_params)
         except Exception as exc:
             print(f"{pair}: skipped ({exc})")
             continue
         frames[pair] = (hourly, daily)
         print(f"{pair}: {len(hourly)} entry bars, {len(daily)} daily bars")
-    result = run_portfolio(frames, signal_params=sig_params, exec_frames=exec_frames)
+    result = run_portfolio(frames)
     trades_path = out_dir / "portfolio_trades.csv"
     result.trades_df.to_csv(trades_path, index=False)
     print(f"\nwrote {trades_path} ({len(result.trades_df)} trades)")
