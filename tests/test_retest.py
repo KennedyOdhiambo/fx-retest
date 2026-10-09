@@ -1,4 +1,4 @@
-"""Setup B tests: break-then-return grading, confirmations, expiry."""
+"""Retest tests: break-then-return grading, confirmations, expiry."""
 
 from dataclasses import replace
 

@@ -1,4 +1,4 @@
-"""Setup A backtest tests: market fills, stop-first exits, warning exit, costs."""
+"""Backtest tests: market/limit fills, stop-first exits, warning exit, costs."""
 
 import pandas as pd
 import pytest
