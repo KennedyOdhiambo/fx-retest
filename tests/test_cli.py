@@ -21,7 +21,15 @@ def _frame(n: int = 60, start: str = "2024-01-01", freq: str = "h") -> pd.DataFr
 
 @pytest.fixture
 def stubbed(monkeypatch: pytest.MonkeyPatch, tmp_path) -> None:
-    def fake_load(pair: str, start=None, end=None, fetcher=None, cache_dir=None, granularity=None):
+    def fake_load(
+        pair: str,
+        start=None,
+        end=None,
+        fetcher=None,
+        cache_dir=None,
+        granularity=None,
+        refresh=False,
+    ):
         return _frame(60) if granularity == "H1" else _frame(60, freq="D")
 
     monkeypatch.setattr(cli, "load_ohlc", fake_load)

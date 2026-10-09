@@ -46,12 +46,16 @@ class RetestParams:
     min_reward_risk: float = 1.0
     min_stop_atr: float = 0.25
     limit_expiry_bars: int = 24
+    session_enabled: bool = False
+    entry_start_hour_utc: int = 0
+    entry_end_hour_utc: int = 20
 
     @classmethod
     def from_config(cls) -> RetestParams:
         cfg = get_config()
         lvl = cfg.section("levels")
         ret = cfg.section("retest")
+        ses = cfg.section("session")
         return cls(
             swing_lookback=int(lvl.get("swing_lookback", 5)),
             cluster_ticks=int(lvl.get("cluster_ticks", 10)),
@@ -76,7 +80,27 @@ class RetestParams:
             min_reward_risk=float(ret.get("min_reward_risk", 1.0)),
             min_stop_atr=float(ret.get("min_stop_atr", 0.25)),
             limit_expiry_bars=int(ret.get("limit_expiry_bars", 24)),
+            session_enabled=bool(ses.get("enabled", False)),
+            entry_start_hour_utc=int(ses.get("entry_start_hour_utc", 0)),
+            entry_end_hour_utc=int(ses.get("entry_end_hour_utc", 20)),
         )
+
+
+def _in_session(ts: Any, params: RetestParams) -> bool:
+    """Return-bar must sit in the liquid entry window (UTC, weekdays only)."""
+    if not params.session_enabled:
+        return True
+    t = pd.Timestamp(ts)
+    t = t.tz_localize("UTC") if t.tzinfo is None else t.tz_convert("UTC")
+    if int(t.weekday()) >= 5:
+        return False
+    if int(t.weekday()) == 4 and int(t.hour) >= params.entry_end_hour_utc:
+        return False  # Friday late: flat into the weekend
+    h = int(t.hour)
+    start, end = params.entry_start_hour_utc, params.entry_end_hour_utc
+    if start <= end:
+        return start <= h < end
+    return h >= start or h < end
 
 
 SIGNAL_COLUMNS = [
@@ -315,6 +339,8 @@ def generate_retest_signals(
         deadline = min(bpos + params.max_break_return_bars, len(hourly) - 1)
         returns = _return_episodes(level, hourly, bpos, deadline, direction, params)
         for p, ret_ts in returns:
+            if not _in_session(ret_ts, params):
+                continue  # illiquid return bar: no new slate until Asian open
             factors = daily_confirmations(daily, level.price, direction, ret_ts, params)
             if len(factors) < required:
                 continue

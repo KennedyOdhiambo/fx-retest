@@ -207,3 +207,121 @@ def test_exit_slippage_applies_adversely() -> None:
     t = res.trades_df.iloc[0]
     assert t["exit_price"] == pytest.approx(1.1100 - 0.0010)  # target minus 10-pip slip
     assert t["pnl"] == pytest.approx((1.1090 - 1.1000) * t["units"])
+
+
+def _hourly_frame(start: str, periods: int) -> pd.DataFrame:
+    idx = pd.date_range(start, periods=periods, freq="h", tz="UTC")
+    df = pd.DataFrame(
+        {"open": 1.10, "high": 1.11, "low": 1.09, "close": 1.10, "volume": 0.0},
+        index=idx,
+    )
+    df.index.name = "timestamp"
+    return validate_ohlc(df)
+
+
+def test_session_forces_flat_at_eod() -> None:
+    params = BacktestParams(
+        spread_pips=0.0,
+        slippage_pips=0.0,
+        exit_slippage_pips=0.0,
+        risk_per_trade_pct=1.0,
+        min_equity=10000.0,
+        max_hold_bars=120,
+        session_enabled=True,
+        entry_start_hour_utc=0,
+        entry_end_hour_utc=20,
+        force_flat_hour_utc=21,
+    )
+    df = _hourly_frame("2024-01-01 10:00+00:00", 15)  # 10:00 -> 00:00 next day
+    sig = _sig(df.index[0], "long", 1.05, 1.20)  # never touched: must survive to EOD
+    res = run_backtest(df, sig, params)
+    assert len(res.trades_df) == 1
+    t = res.trades_df.iloc[0]
+    assert t["exit_reason"] == "eod"
+    assert pd.Timestamp(t["exit_ts"]).hour == 21
+
+
+def test_session_blocks_entries_in_illiquid_window() -> None:
+    params = BacktestParams(
+        spread_pips=0.0,
+        slippage_pips=0.0,
+        exit_slippage_pips=0.0,
+        risk_per_trade_pct=1.0,
+        min_equity=10000.0,
+        session_enabled=True,
+        entry_start_hour_utc=0,
+        entry_end_hour_utc=20,
+        force_flat_hour_utc=21,
+    )
+    df = _hourly_frame("2024-01-01 22:00+00:00", 4)  # 22,23,00,01: all illiquid
+    sig = _sig(df.index[0], "long", 1.09, 1.20)
+    res = run_backtest(df, sig, params)
+    assert res.trades_df.empty  # market fill at 23:00 blocked
+
+
+def test_session_no_exit_before_entry_bar() -> None:
+    """Limit fill several bars out: pre-fill bars must not stop the trade."""
+    params = BacktestParams(
+        spread_pips=0.0,
+        slippage_pips=0.0,
+        exit_slippage_pips=0.0,
+        risk_per_trade_pct=1.0,
+        min_equity=10000.0,
+        session_enabled=True,
+        entry_start_hour_utc=0,
+        entry_end_hour_utc=20,
+        force_flat_hour_utc=21,
+    )
+    idx = pd.date_range("2024-01-03 10:00+00:00", periods=8, freq="h", tz="UTC")
+    df = pd.DataFrame(
+        {
+            "open": [1.10, 1.10, 1.10, 1.10, 1.10, 1.10, 1.10, 1.10],
+            "high": [1.10, 1.25, 1.10, 1.10, 1.10, 1.10, 1.10, 1.10],
+            "low": [1.10, 1.10, 1.10, 1.10, 1.09, 1.10, 1.10, 1.10],
+            "close": [1.10, 1.10, 1.10, 1.10, 1.10, 1.10, 1.10, 1.10],
+            "volume": 0.0,
+        },
+        index=idx,
+    )
+    df.index.name = "timestamp"
+    df = validate_ohlc(df)
+    sig = pd.DataFrame(
+        [
+            {
+                "timestamp": idx[0],
+                "direction": "long",
+                "entry_price": 1.09,  # fills at 14:00 bar, not before
+                "stop_price": 1.05,
+                "target_price": 1.20,
+                "entry_mode": "limit",
+                "expiry_bars": 10.0,
+            }
+        ]
+    )
+    res = run_backtest(df, sig, params)
+    assert len(res.trades_df) == 1
+    t = res.trades_df.iloc[0]
+    assert t["entry_ts"] == idx[4]  # first touch of 1.09
+    assert pd.Timestamp(t["exit_ts"]) >= pd.Timestamp(t["entry_ts"])
+
+
+def test_session_friday_flat_before_weekend() -> None:
+    params = BacktestParams(
+        spread_pips=0.0,
+        slippage_pips=0.0,
+        exit_slippage_pips=0.0,
+        risk_per_trade_pct=1.0,
+        min_equity=10000.0,
+        max_hold_bars=120,
+        session_enabled=True,
+        entry_start_hour_utc=0,
+        entry_end_hour_utc=20,
+        force_flat_hour_utc=21,
+    )
+    df = _hourly_frame("2024-01-05 10:00+00:00", 15)  # Friday 10:00 -> Saturday
+    sig = _sig(df.index[0], "long", 1.05, 1.20)
+    res = run_backtest(df, sig, params)
+    assert len(res.trades_df) == 1
+    t = res.trades_df.iloc[0]
+    assert t["exit_reason"] == "eod"
+    assert pd.Timestamp(t["exit_ts"]).weekday() == 4  # Friday, never weekend

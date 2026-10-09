@@ -30,6 +30,7 @@ Trade the first return to a freshly broken level: break, then come straight back
 8. **Target:** nearest opposing level; fallback `entry ± fta_fallback_atr (2.0 × ATR)`.
 9. **Min-R filter:** skip when `(target − entry) < min_reward_risk (1.0) × risk`.
 10. **Warning-sign exit:** first H1 close back through the return extreme exits immediately.
+11. **Day session only `(tunable: session.enabled)`:** entries only on fills between `entry_start_hour_utc (0)` and `entry_end_hour_utc (20)` UTC; open positions go flat at `force_flat_hour_utc (21)` UTC (`eod` exit). No overnight holds, no swaps, nothing traded in the illiquid 21–00 UTC window.
 
 ## 4. Flowchart
 ```mermaid

@@ -84,7 +84,9 @@ def _in_window(sig, start: str | None, end: str | None):
 
 
 def _cmd_fetch(args: argparse.Namespace) -> int:
-    df = load_ohlc(args.pair, _dt(args.start), _dt(args.end), granularity=args.granularity)
+    df = load_ohlc(
+        args.pair, _dt(args.start), _dt(args.end), granularity=args.granularity, refresh=True
+    )
     print(f"{args.pair}: {len(df)} bars ({df.index.min()} -> {df.index.max()})")
     return 0
 

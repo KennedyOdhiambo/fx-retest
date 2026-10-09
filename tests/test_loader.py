@@ -110,6 +110,28 @@ def test_granularity_override_uses_separate_cache(tmp_path: Path) -> None:
     assert not cache_path(tmp_path, "EUR_USD", "D").exists()
 
 
+def test_default_read_is_offline_never_touches_network(tmp_path: Path) -> None:
+    load_ohlc("EUR_USD", _dt(1), _dt(5), fetcher=_stub(_bars("2024-01-01", 5)), cache_dir=tmp_path)
+
+    def _boom(symbol: str, granularity: str, start: Any, end: Any) -> pd.DataFrame:
+        raise AssertionError("network touched on a cache-only read")
+
+    import retest.data.loader as loader
+
+    orig = loader.fetch_tradingview
+    loader.fetch_tradingview = _boom  # type: ignore[assignment]
+    try:
+        out = load_ohlc("EUR_USD", _dt(1), _dt(5), cache_dir=tmp_path)
+    finally:
+        loader.fetch_tradingview = orig
+    assert len(out) == 5
+
+
+def test_offline_read_with_no_cache_raises_without_network(tmp_path: Path) -> None:
+    with pytest.raises(RuntimeError, match="No cache"):
+        load_ohlc("EUR_USD", _dt(1), _dt(5), cache_dir=tmp_path)
+
+
 def test_empty_frame_helper() -> None:
     assert empty_ohlc().empty
 

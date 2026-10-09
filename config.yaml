@@ -69,6 +69,12 @@ retest:                        # breakout-then-return signal parameters
   min_stop_atr: 0.25           # skip if stop distance < this x ATR (stops inside noise)
   limit_expiry_bars: 24        # H1 bars before an unfilled return limit expires
 
+session:
+  enabled: true              # day-session only: no overnight holds, no swaps
+  entry_start_hour_utc: 0    # Asian open: first entries allowed (UTC hour of fill bar)
+  entry_end_hour_utc: 20     # no new entries at/after this hour (exclusive)
+  force_flat_hour_utc: 21    # flat before the illiquid 21-00 UTC window / US close
+
 backtest:
   spread_pips: 1.0
   slippage_pips: 0.5

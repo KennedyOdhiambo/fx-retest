@@ -1,7 +1,11 @@
 """Real OHLC ingestion: TradingView feed + local parquet cache.
 
-The cache is the source of truth after the first fetch: cached ranges are never
-re-fetched, and a failed fetch degrades to cache.
+Manual-fetch model: ``load_ohlc`` reads the local cache ONLY (never touches
+the network) unless ``refresh=True`` or an explicit ``fetcher`` is passed.
+New data arrives only via ``retest fetch`` (or a direct ``refresh=True``
+call), which merges it into ``data/cache/*.parquet``. Every other process —
+signals, backtest, validate, portfolio, notebooks — reads cache and runs
+offline, so repeated runs are fast and deterministic.
 """
 
 from __future__ import annotations
@@ -47,19 +51,31 @@ def load_ohlc(
     fetcher: Fetcher | None = None,
     cache_dir: Path | None = None,
     granularity: str | None = None,
+    refresh: bool = False,
 ) -> pd.DataFrame:
-    """Load OHLC for ``pair`` within ``[start, end]`` (UTC) via cache-first fetch."""
+    """Load OHLC for ``pair`` within ``[start, end]`` (UTC) from the local cache.
+
+    No network unless ``refresh=True`` (uses ``fetcher or fetch_tradingview``).
+    An explicit ``fetcher`` also triggers a fetch (keeps stubbed tests honest).
+    Cached ranges are never re-fetched; fetched bars merge into the cache, and
+    a failed refresh degrades to cache.
+    """
     granularity = granularity or str(get_config().get("data.tradingview.granularity", "D"))
     cache_dir = cache_dir or Path(get_config().get("data.cache_dir", "data/cache"))
     path = cache_path(cache_dir, pair, granularity)
 
     cached = _read_cache(path) if path.exists() else empty_ohlc()
-    try:
-        fetched = (fetcher or fetch_tradingview)(pair, granularity, start, end)
-    except Exception as exc:
-        if cached.empty:
-            raise RuntimeError(f"Fetch failed and no cache at {path}: {exc}") from exc
-        log.warning("Fetch failed (%s); using cached data only", exc)
+    if refresh or fetcher is not None:
+        try:
+            fetched = (fetcher or fetch_tradingview)(pair, granularity, start, end)
+        except Exception as exc:
+            if cached.empty:
+                raise RuntimeError(f"Fetch failed and no cache at {path}: {exc}") from exc
+            log.warning("Fetch failed (%s); using cached data only", exc)
+            fetched = empty_ohlc()
+    elif cached.empty:
+        raise RuntimeError(f"No cache at {path}: run `retest fetch {pair}` first")
+    else:
         fetched = empty_ohlc()
 
     if not fetched.empty:

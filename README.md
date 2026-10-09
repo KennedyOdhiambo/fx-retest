@@ -53,9 +53,11 @@ uv sync --extra dev     # install runtime + dev deps (pytest, ruff)
 ## Run
 
 ```bash
-# pull data (daily + hourly; re-runs only fetch what's new)
+# pull data manually when you want it fresh (daily + hourly; only new bars fetched)
 uv run retest fetch EUR_USD
 uv run retest fetch EUR_USD --granularity H1
+
+# everything below reads the local cache in data/cache/ — no network, fast
 
 # generate signals
 uv run retest signals EUR_USD --start 2025-01-01 --end 2025-06-30 --out signals.csv
