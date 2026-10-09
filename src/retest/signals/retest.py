@@ -1,8 +1,9 @@
 """Retest signals: breakout-then-return off higher-timeframe levels (strategy.md).
 
-Daily levels/targets/confirmations, H1 break/return/entry/stop. One signal
-per level at most: first return only, touch-graded confirmations, limit entry
-so the existing limit-fill engine executes unchanged.
+Daily levels/targets/confirmations, H1 break/return/entry/stop. Up to
+``max_returns_per_level`` signals per level (default 1: first return only),
+touch-graded confirmations, limit entry so the existing limit-fill engine
+executes unchanged.
 """
 
 from __future__ import annotations
@@ -44,6 +45,7 @@ class RetestParams:
     min_reward_risk: float = 1.0
     min_stop_atr: float = 0.25
     limit_expiry_bars: int = 24
+    max_returns_per_level: int = 1  # how many return episodes may trade per level
     max_level_age_days: int = 0  # 0 = off; drop levels older than this at signal time
     session_enabled: bool = False
     entry_start_hour_utc: int = 7
@@ -86,6 +88,7 @@ class RetestParams:
             min_reward_risk=float(ret.get("min_reward_risk", 1.0)),
             min_stop_atr=float(ret.get("min_stop_atr", 0.25)),
             limit_expiry_bars=int(ret.get("limit_expiry_bars", 24)),
+            max_returns_per_level=int(ret.get("max_returns_per_level", 1)),
             max_level_age_days=int(
                 ret.get("max_level_age_days", lvl.get("max_level_age_days", 0))
             ),
@@ -391,73 +394,81 @@ def _generate(
         required = params.touch_gates.get(min(touches, 3), 0)
         if direction == "long":
             required += params.long_extra_confirmations
-        # only the first return trades; later returns are stale (strategy.md §3)
+        # first N return episodes trade (N=1 keeps the first-return-only rule)
         deadline = min(bpos + params.max_break_return_bars, len(exec_frame) - 1)
         returns = _return_episodes(price_at, exec_frame, bpos, deadline, direction, params)
         if not returns:
             continue
-        p, ret_ts = returns[0]
-        if not _in_session(ret_ts, params):
-            continue
-        if params.max_level_age_days > 0:
-            latest_swing = max(level.swing_times) if level.swing_times else level.formed_at
-            if (pd.Timestamp(ret_ts) - pd.Timestamp(latest_swing)).days > params.max_level_age_days:
+        for p, ret_ts in returns[: max(params.max_returns_per_level, 1)]:
+            if not _in_session(ret_ts, params):
                 continue
-        limit = _price_asof(level, levels_frame, params.swing_lookback, ret_ts, level_session)
-        factors = daily_confirmations(levels_frame, limit, direction, ret_ts, params, level_session)
-        if len(factors) < required:
-            continue
-        a = float(atr_h.iloc[p])
-        if not a > 0:
-            continue
-        if params.atr_regime_lookback > 0:
-            start = max(0, p - params.atr_regime_lookback)
-            med = float(atr_h.iloc[start:p].median()) if p > start else 0.0
-            if not med > 0 or a < params.atr_regime_mult * med:
-                continue  # dead board: chop filter
-        if params.special_fib_rule:
-            override = fib_override(levels_frame, limit, ret_ts, params, level_session)
-            if override is not None:
-                limit = float(override)
-        buf = params.stop_buffer_atr * a
-        if direction == "long":
-            stop = float(lows[p] - buf)
-            level_now = _known_levels(
-                resistances, available, levels_frame, params, ret_ts, level_session
+            if params.max_level_age_days > 0:
+                latest_swing = (
+                    max(level.swing_times) if level.swing_times else level.formed_at
+                )
+                if (
+                    pd.Timestamp(ret_ts) - pd.Timestamp(latest_swing)
+                ).days > params.max_level_age_days:
+                    continue
+            limit = _price_asof(level, levels_frame, params.swing_lookback, ret_ts, level_session)
+            factors = daily_confirmations(
+                levels_frame, limit, direction, ret_ts, params, level_session
             )
-            above = [r for r in level_now if r > limit]
-            target = min(above) if above else limit + params.fta_fallback_atr * a
-            risk, reward = limit - stop, target - limit
-            extreme = float(lows[p])
-        else:
-            stop = float(highs[p] + buf)
-            level_now = _known_levels(
-                supports, available, levels_frame, params, ret_ts, level_session
+            if len(factors) < required:
+                continue
+            a = float(atr_h.iloc[p])
+            if not a > 0:
+                continue
+            if params.atr_regime_lookback > 0:
+                regime_start = max(0, p - params.atr_regime_lookback)
+                med = (
+                    float(atr_h.iloc[regime_start:p].median()) if p > regime_start else 0.0
+                )
+                if not med > 0 or a < params.atr_regime_mult * med:
+                    continue  # dead board: chop filter
+            if params.special_fib_rule:
+                override = fib_override(levels_frame, limit, ret_ts, params, level_session)
+                if override is not None:
+                    limit = float(override)
+            buf = params.stop_buffer_atr * a
+            if direction == "long":
+                stop = float(lows[p] - buf)
+                level_now = _known_levels(
+                    resistances, available, levels_frame, params, ret_ts, level_session
+                )
+                above = [r for r in level_now if r > limit]
+                target = min(above) if above else limit + params.fta_fallback_atr * a
+                risk, reward = limit - stop, target - limit
+                extreme = float(lows[p])
+            else:
+                stop = float(highs[p] + buf)
+                level_now = _known_levels(
+                    supports, available, levels_frame, params, ret_ts, level_session
+                )
+                below = [s for s in level_now if s < limit]
+                target = max(below) if below else limit - params.fta_fallback_atr * a
+                risk, reward = stop - limit, limit - target
+                extreme = float(highs[p])
+            if not risk > 0 or reward < params.min_reward_risk * risk:
+                continue
+            if params.min_stop_atr > 0 and risk < params.min_stop_atr * a:
+                continue  # stop inside noise: leverage fantasy, skip
+            rows.append(
+                {
+                    "timestamp": ret_ts,
+                    "direction": direction,
+                    "entry_price": float(limit),
+                    "stop_price": float(stop),
+                    "target_price": float(target),
+                    "level_price": float(limit),
+                    "sweep_extreme": extreme,
+                    "touches": touches,
+                    "confirmations": factors,
+                    "expected_r": float(reward / risk),
+                    "entry_mode": "limit",
+                    "expiry_bars": float(params.limit_expiry_bars),
+                }
             )
-            below = [s for s in level_now if s < limit]
-            target = max(below) if below else limit - params.fta_fallback_atr * a
-            risk, reward = stop - limit, limit - target
-            extreme = float(highs[p])
-        if not risk > 0 or reward < params.min_reward_risk * risk:
-            continue
-        if params.min_stop_atr > 0 and risk < params.min_stop_atr * a:
-            continue  # stop inside noise: leverage fantasy, skip
-        rows.append(
-            {
-                "timestamp": ret_ts,
-                "direction": direction,
-                "entry_price": float(limit),
-                "stop_price": float(stop),
-                "target_price": float(target),
-                "level_price": float(limit),
-                "sweep_extreme": extreme,
-                "touches": touches,
-                "confirmations": factors,
-                "expected_r": float(reward / risk),
-                "entry_mode": "limit",
-                "expiry_bars": float(params.limit_expiry_bars),
-            }
-        )
     if not rows:
         return _empty_signals()
     out = pd.DataFrame(rows)

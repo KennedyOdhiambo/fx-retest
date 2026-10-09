@@ -40,8 +40,8 @@ atr:
   period: 14                 # Wilder ATR period, all timeframes
 
 levels:
-  swing_lookback: 5          # fractal swing window (bars each side)
-  cluster_ticks: 10          # max tick distance between swings merged into one level
+  swing_lookback: 4          # fractal swing window (bars each side)
+  cluster_ticks: 5           # max tick distance between swings merged into one level
   tick_size: 0.0001          # price tick for the pair (clustering distance unit)
   min_swing_magnitude_atr: 0.3  # min swing size in ATR, else noise
   touch_tolerance_atr: 0.3   # close beyond this fraction of ATR = break (level dead)
@@ -54,8 +54,8 @@ retest:                        # breakout-then-return signal parameters
   max_break_return_bars: 24    # return must come within this many H1 bars after the break
   touch_gates:                 # pre-break touches -> required daily confirmations
     "3": 0
-    "2": 1
-    "1": 2
+    "2": 0
+    "1": 0
   pin_wick_body_ratio: 2.0     # pin wick must exceed body by this (daily bias pattern)
   bias_sfp_wick_atr: 0.1       # daily swing-failure sweep, in daily ATR
   bias_sfp_close_atr: 0.05     # daily swing-failure close back inside, in daily ATR

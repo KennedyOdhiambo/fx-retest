@@ -193,7 +193,7 @@ def apply_usd_cap(trades_df: pd.DataFrame, cap: int | None = None) -> pd.DataFra
     t = trades_df.copy()
     t["entry_ts"] = pd.to_datetime(t["entry_ts"], utc=True)
     t["exit_ts"] = pd.to_datetime(t["exit_ts"], utc=True)
-    t["_usd"] = [usd_direction(s, d) for s, d in zip(t["symbol"], t["direction"])]
+    t["_usd"] = [usd_direction(s, d) for s, d in zip(t["symbol"], t["direction"], strict=False)]
     t["_er"] = pd.to_numeric(t.get("expected_r", float("nan")), errors="coerce")
     t = t.sort_values(["entry_ts", "exit_ts"]).reset_index(drop=True)
     kept: list[dict] = []
@@ -217,7 +217,7 @@ def apply_usd_cap(trades_df: pd.DataFrame, cap: int | None = None) -> pd.DataFra
         drop = cand[0]
         if drop is r:
             continue  # weakest — sits out
-        kept = [k for k in kept if not (k is drop)]
+        kept = [k for k in kept if k is not drop]
         kept.append(r)
     out = pd.DataFrame(kept)
     if out.empty:

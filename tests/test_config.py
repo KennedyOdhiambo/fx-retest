@@ -11,7 +11,7 @@ def test_config_loads_with_expected_sections() -> None:
 
 def test_key_tunables_present() -> None:
     cfg = get_config()
-    assert cfg.get("levels.swing_lookback") == 5
+    assert cfg.get("levels.swing_lookback") == 4
     assert float(cfg.get("levels.touch_tolerance_atr")) >= 0.1
     assert cfg.get("retest.max_break_return_bars") == 24
     assert cfg.get("retest.touch_gates.3") == 0
