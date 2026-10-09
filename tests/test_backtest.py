@@ -325,3 +325,43 @@ def test_session_friday_flat_before_weekend() -> None:
     t = res.trades_df.iloc[0]
     assert t["exit_reason"] == "eod"
     assert pd.Timestamp(t["exit_ts"]).weekday() == 4  # Friday, never weekend
+
+
+def test_session_winner_runs_loser_cut_overnight() -> None:
+    def _params() -> BacktestParams:
+        return BacktestParams(
+            spread_pips=0.0,
+            slippage_pips=0.0,
+            exit_slippage_pips=0.0,
+            risk_per_trade_pct=1.0,
+            min_equity=10000.0,
+            max_hold_bars=120,
+            session_enabled=True,
+            entry_start_hour_utc=0,
+            entry_end_hour_utc=20,
+            force_flat_hour_utc=21,
+            hold_winners_overnight=True,
+        )
+
+    # Wednesday 10:00 -> Thursday 02:00; 21:00 flat bar decides.
+    idx = pd.date_range("2024-01-03 10:00+00:00", periods=17, freq="h", tz="UTC")
+    base = {"open": 1.10, "high": 1.11, "low": 1.09, "close": 1.10, "volume": 0.0}
+    # winner: 21:00 open well above entry
+    wdf = pd.DataFrame(base, index=idx)
+    wdf.loc[idx[0], ["open", "high", "low", "close"]] = [1.10, 1.11, 1.09, 1.10]
+    wdf.loc[idx[1], ["open"]] = 1.10
+    wdf.loc[idx[11], ["open"]] = 1.15  # 21:00 bar open: winner runs
+    wdf.index.name = "timestamp"
+    wdf = validate_ohlc(wdf)
+    res = run_backtest(wdf, _sig(idx[0], "long", 1.05, 1.50), _params())
+    assert pd.Timestamp(res.trades_df.iloc[0]["exit_ts"]) > idx[11]
+
+    # loser: 21:00 open below entry -> cut
+    ldf = pd.DataFrame(base, index=idx)
+    ldf.loc[idx[11], ["open"]] = 1.08
+    ldf.index.name = "timestamp"
+    ldf = validate_ohlc(ldf)
+    res = run_backtest(ldf, _sig(idx[0], "long", 1.05, 1.50), _params())
+    t = res.trades_df.iloc[0]
+    assert t["exit_reason"] == "eod"
+    assert t["exit_ts"] == idx[11]

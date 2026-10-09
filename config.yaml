@@ -74,6 +74,7 @@ session:
   entry_start_hour_utc: 0    # Asian open: first entries allowed (UTC hour of fill bar)
   entry_end_hour_utc: 20     # no new entries at/after this hour (exclusive)
   force_flat_hour_utc: 21    # flat before the illiquid 21-00 UTC window / US close
+  hold_winners_overnight: true  # winners (unrealized > 0 at flat) run; losers cut; Friday flat all
 
 backtest:
   spread_pips: 1.0

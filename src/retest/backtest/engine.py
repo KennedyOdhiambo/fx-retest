@@ -34,6 +34,7 @@ class BacktestParams:
     entry_start_hour_utc: int = 0
     entry_end_hour_utc: int = 20
     force_flat_hour_utc: int = 21
+    hold_winners_overnight: bool = False
 
     @classmethod
     def from_config(cls, pair: str | None = None) -> BacktestParams:
@@ -57,6 +58,7 @@ class BacktestParams:
             entry_start_hour_utc=int(ses.get("entry_start_hour_utc", 0)),
             entry_end_hour_utc=int(ses.get("entry_end_hour_utc", 20)),
             force_flat_hour_utc=int(ses.get("force_flat_hour_utc", 21)),
+            hold_winners_overnight=bool(ses.get("hold_winners_overnight", False)),
         )
 
 
@@ -104,7 +106,7 @@ def run_backtest(
         ts = df.index[i]
         bar = df.iloc[i]
         if open_pos is not None and i >= int(open_pos["entry_idx"]):
-            if params.session_enabled and _should_flat(ts, open_pos, params):
+            if params.session_enabled and _should_flat(ts, open_pos, bar, params, exit_cost):
                 exit_price = _eod_price(str(open_pos["direction"]), bar, exit_cost)
                 signed = 1.0 if open_pos["direction"] == "long" else -1.0
                 pnl = signed * (exit_price - open_pos["entry_price"]) * open_pos["units"]
@@ -289,22 +291,41 @@ def _no_entry_bar(ts: Any, params: BacktestParams) -> bool:
     return _is_flat_bar(ts, params) or not _in_entry_window(ts, params)
 
 
-def _should_flat(ts: Any, pos: dict[str, Any], params: BacktestParams) -> bool:
+def _should_flat(
+    ts: Any, pos: dict[str, Any], bar: pd.Series, params: BacktestParams, exit_cost: float
+) -> bool:
     """Flat at 21:00, Friday 20:00 into the weekend, or any later-date bar.
 
-    The date backstop covers instruments with no 21:00 bar (metals halt
-    21:00-22:00 UTC): the next tradable bar closes the position instead of
-    carrying it for days.
+    With ``hold_winners_overnight``, a position showing a profit at the flat
+    bar runs (except Fridays: everything is flat before the weekend). The date
+    backstop covers instruments with no 21:00 bar (metals halt 21:00-22:00
+    UTC): the next tradable bar closes losers instead of carrying them.
     """
     t = _as_utc(ts)
-    if _is_flat_bar(ts, params):
+    if _is_flat_bar(ts, params) or _is_friday_close(t, params) or int(t.weekday()) >= 5:
+        if (
+            params.hold_winners_overnight
+            and int(t.weekday()) != 4
+            and _unrealized(pos, bar, exit_cost) > 0
+        ):
+            return False  # winner runs overnight
         return True
-    if int(t.weekday()) == 4 and int(t.hour) >= params.entry_end_hour_utc:
-        return True  # Friday close: flat before the weekend
-    if int(t.weekday()) >= 5:
-        return True  # weekend bar (crypto): stay flat
     entry_day = _as_utc(pos["entry_ts"]).date()
-    return t.date() > entry_day
+    if t.date() > entry_day:
+        if params.hold_winners_overnight and _unrealized(pos, bar, exit_cost) > 0:
+            return False
+        return True
+    return False
+
+
+def _is_friday_close(t: pd.Timestamp, params: BacktestParams) -> bool:
+    return int(t.weekday()) == 4 and int(t.hour) >= params.entry_end_hour_utc
+
+
+def _unrealized(pos: dict[str, Any], bar: pd.Series, exit_cost: float) -> float:
+    exit_price = _eod_price(str(pos["direction"]), bar, exit_cost)
+    signed = 1.0 if pos["direction"] == "long" else -1.0
+    return signed * (exit_price - float(pos["entry_price"])) * float(pos["units"])
 
 
 def _eod_price(direction: str, bar: pd.Series, exit_cost: float) -> float:
