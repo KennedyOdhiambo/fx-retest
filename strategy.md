@@ -30,7 +30,6 @@ Trade the first return to a freshly broken level: break, then come straight back
 8. **Target:** nearest opposing level; fallback `entry ± fta_fallback_atr (2.0 × ATR)`.
 9. **Min-R filter:** skip when `(target − entry) < min_reward_risk (1.0) × risk`.
 10. **Warning-sign exit:** first H1 close back through the return extreme exits immediately.
-11. **Day session only `(tunable: session.enabled)`:** entries only on fills between `entry_start_hour_utc (0)` and `entry_end_hour_utc (20)` UTC; open positions go flat at `force_flat_hour_utc (21)` UTC (`eod` exit). No overnight holds, no swaps, nothing traded in the illiquid 21–00 UTC window.
 
 ## 4. Flowchart
 ```mermaid
@@ -54,7 +53,7 @@ flowchart TD
 ```
 
 ## 5. Parameters (all in `config.yaml`)
-`retest:` — max_break_return_bars 24, touch_gates 3:0/2:1/1:2, pin_wick_body_ratio 2.0, bias_sfp wick/close 0.1/0.05, fib_lookback 20, fib_ratios 38.2/50/61.8, fib_proximity 0.2, special_fib_rule on, atr_stretch 20×1.0, stop_buffer 0.1, fta_fallback 2.0, min_reward_risk 1.0, min_stop_atr 0.25, limit_expiry 24. Shared `levels:` and `backtest:` (per-pair pip sizes, exit slippage) as documented there.
+`levels:` touch_tolerance 0.3. `retest:` — max_break_return_bars 24, touch_gates 3:0/2:1/1:2, pin_wick_body_ratio 2.0, bias_sfp wick/close 0.1/0.05, fib_lookback 20, fib_ratios 38.2/50/61.8, fib_proximity 0.2, special_fib_rule on, atr_stretch 20×1.0, stop_buffer 0.25, fta_fallback 2.0, min_reward_risk 1.0, min_stop_atr 0.7, limit_expiry 24, max_level_age_days 365 (drop stale levels). `session:` — enabled, entry 0-20 UTC, flat 21:00, winners run / losers cut, Friday flat. Shared `backtest:` (per-pair pip sizes, exit slippage) as documented there.
 
 ## 6. Validation policy
 Random-entry baseline must fail (engine honesty), walk-forward out-of-sample judges every tuning claim, significance (Sharpe CI + deflated Sharpe) before any edge claim. In-sample green alone adopts nothing.

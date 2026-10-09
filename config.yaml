@@ -17,6 +17,8 @@ data:
       EUR_GBP: [EURGBP, OANDA]
       EUR_JPY: [EURJPY, OANDA]
       GBP_JPY: [GBPJPY, OANDA]
+      EUR_CHF: [EURCHF, OANDA]
+      USD_NOK: [USDNOK, OANDA]
       XAU_USD: [XAUUSD, OANDA]
       XAG_USD: [XAGUSD, OANDA]
       WTI_USD: [USOIL, TVC]
@@ -42,8 +44,8 @@ levels:
   cluster_ticks: 10          # max tick distance between swings merged into one level
   tick_size: 0.0001          # price tick for the pair (clustering distance unit)
   min_swing_magnitude_atr: 0.3  # min swing size in ATR, else noise
-  touch_tolerance_atr: 0.1   # close beyond this fraction of ATR = break (level dead)
-  min_swings_per_level: 1    # level must bundle this many swings (equal highs/lows); 1 = off
+  touch_tolerance_atr: 0.3   # close beyond this fraction of ATR = break (level dead)
+  min_swings_per_level: 1    # obvious levels only: equal highs/lows
   extreme_lookback: 0        # bars for rolling day-extremes; level must sit at one; 0 = off
   extreme_proximity_atr: 0.25  # how close to the rolling extreme counts
   min_level_spacing_atr: 0.0 # drop weaker of two levels closer than this x ATR; 0 = off
@@ -63,18 +65,23 @@ retest:                        # breakout-then-return signal parameters
   special_fib_rule: true       # place limit at fib instead of raw level when close
   atr_stretch_period: 20       # daily SMA/ATR window for stretch confirmation
   atr_stretch_multiple: 1.0    # level this far from SMA20 = stretched
-  stop_buffer_atr: 0.1         # stop beyond return-bar extreme, in ATR
+  stop_buffer_atr: 0.25        # stop beyond return-bar extreme, in ATR
   fta_fallback_atr: 2.0        # target when no opposing level exists
   min_reward_risk: 1.0         # skip if target < this x stop distance
-  min_stop_atr: 0.25           # skip if stop distance < this x ATR (stops inside noise)
+  min_stop_atr: 0.7            # skip if stop distance < this x ATR (stops inside noise)
   limit_expiry_bars: 24        # H1 bars before an unfilled return limit expires
+  max_level_age_days: 365      # drop levels whose latest swing is older than this
+  ban_one_touch: false         # trade 2-3 touch setups only
+  long_extra_confirmations: 0  # longs must clear required + 1
+  atr_regime_lookback: 0       # H1 bars for ATR median; 0 = off
+  atr_regime_mult: 1.0         # require cur ATR >= mult x median
 
 session:
-  enabled: true              # day-session only: no overnight holds, no swaps
-  entry_start_hour_utc: 0    # Asian open: first entries allowed (UTC hour of fill bar)
+  enabled: true              # day-session only: no overnight holds
+  entry_start_hour_utc: 0    # first entries allowed (UTC hour of return bar)
   entry_end_hour_utc: 20     # no new entries at/after this hour (exclusive)
-  force_flat_hour_utc: 21    # flat before the illiquid 21-00 UTC window / US close
-  hold_winners_overnight: true  # winners (unrealized > 0 at flat) run; losers cut; Friday flat all
+  force_flat_hour_utc: 21    # flat illiquid 21-00 UTC window
+  hold_winners_overnight: true  # winners run; losers cut; Friday flat all
 
 backtest:
   spread_pips: 1.0
@@ -90,6 +97,7 @@ backtest:
   risk_per_trade_pct: 1.0    # fixed-fractional risk per trade; one position at a time
   min_equity: 10000          # starting equity
   max_hold_bars: 120         # timeout exit, bars after entry
+  breakeven_at_r: 0.0        # move stop to entry at +1R; 0 = off
 
 validation:
   walk_forward:
@@ -99,6 +107,16 @@ validation:
   significance:
     confidence: 0.95
     deflated_trials: 50
+
+portfolio:
+  mode: skip               # skip | halve — same-group same-direction overlap rule
+  max_usd_same_direction: 3  # 0 = off; cap concurrent USD-leg bets per side
+  groups:                  # one shared bet each: pick best, never double
+    - [AUD_USD, NZD_USD]   # risk-on commodity FX
+    - [XAU_USD, XAG_USD]   # metals
+    - [EUR_USD, GBP_USD, EUR_GBP, EUR_CHF]  # euro bloc
+    - [USD_JPY, USD_CHF]   # safe-haven USD
+    - [EUR_JPY, GBP_JPY]   # yen crosses
 
 report:
   output_dir: reports

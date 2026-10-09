@@ -71,6 +71,7 @@ class Level:
     kind: str  # "support" | "resistance"
     formed_at: pd.Timestamp
     swing_prices: list[float] = field(default_factory=list)
+    swing_times: list[pd.Timestamp] = field(default_factory=list)
     origin_wick: float = 0.0  # max wick of the forming swing(s), price units
     origin_wick_mult: float = 0.0  # same, in daily ATR at formation
 
@@ -78,8 +79,11 @@ class Level:
     def touches(self) -> int:
         return len(self.swing_prices)
 
-    def add_swing(self, price: float, wick: float = 0.0, wick_mult: float = 0.0) -> None:
+    def add_swing(
+        self, price: float, ts: pd.Timestamp, wick: float = 0.0, wick_mult: float = 0.0
+    ) -> None:
         self.swing_prices.append(price)
+        self.swing_times.append(ts)
         self.price = float(np.mean(self.swing_prices))
         self.origin_wick = max(self.origin_wick, wick)
         self.origin_wick_mult = max(self.origin_wick_mult, wick_mult)
@@ -123,12 +127,13 @@ def detect_levels(
                     kind=kind,
                     formed_at=ts,
                     swing_prices=[price],
+                    swing_times=[ts],
                     origin_wick=wick,
                     origin_wick_mult=wick_mult,
                 )
             )
         else:
-            best.add_swing(price, wick, wick_mult)
+            best.add_swing(price, ts, wick, wick_mult)
     return levels
 
 

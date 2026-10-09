@@ -3,12 +3,9 @@
 A signal at bar ``t`` resolves on the execution frame (H1 or M5): market
 orders fill at bar ``t+1``'s open; limit orders fill at the limit price if a
 bar trades through it within ``expiry_bars`` (unfilled limits expire with no
-trade). Exits per bar, checked in order: session flat (EOD), stop (worst case
-first), target, warning-sign close back through the sweep extreme, timeout.
-One position at a time; the warning exit applies only when the signal carries
-``sweep_extreme``. When ``session_enabled``, fills only happen inside the
-entry window and open positions are forced flat at ``force_flat_hour_utc``,
-so nothing is carried overnight and nothing trades the illiquid window.
+trade). Exits per bar, checked in order: stop (worst case first), target,
+warning-sign close back through the sweep extreme, timeout. One position at
+a time; the warning exit applies only when the signal carries ``sweep_extreme``.
 """
 
 from __future__ import annotations
@@ -31,10 +28,11 @@ class BacktestParams:
     min_equity: float = 10000.0
     max_hold_bars: int = 120
     session_enabled: bool = False
-    entry_start_hour_utc: int = 0
+    entry_start_hour_utc: int = 7
     entry_end_hour_utc: int = 20
     force_flat_hour_utc: int = 21
-    hold_winners_overnight: bool = False
+    hold_winners_overnight: bool = True
+    breakeven_at_r: float = 0.0  # 0 = off; else move stop to entry at +R
 
     @classmethod
     def from_config(cls, pair: str | None = None) -> BacktestParams:
@@ -55,10 +53,11 @@ class BacktestParams:
             min_equity=float(bt.get("min_equity", 10000)),
             max_hold_bars=int(bt.get("max_hold_bars", 120)),
             session_enabled=bool(ses.get("enabled", False)),
-            entry_start_hour_utc=int(ses.get("entry_start_hour_utc", 0)),
+            entry_start_hour_utc=int(ses.get("entry_start_hour_utc", 7)),
             entry_end_hour_utc=int(ses.get("entry_end_hour_utc", 20)),
             force_flat_hour_utc=int(ses.get("force_flat_hour_utc", 21)),
-            hold_winners_overnight=bool(ses.get("hold_winners_overnight", False)),
+            hold_winners_overnight=bool(ses.get("hold_winners_overnight", True)),
+            breakeven_at_r=float(bt.get("breakeven_at_r", 0.0)),
         )
 
 
@@ -123,6 +122,16 @@ def run_backtest(
                 equity_at[ts] = equity
                 open_pos = None
             else:
+                if params.breakeven_at_r > 0 and not open_pos.get("be_done", True):
+                    risk = float(open_pos.get("risk_dist", 0.0))
+                    entry = float(open_pos["entry_price"])
+                    if risk > 0:
+                        if open_pos["direction"] == "long" and bar["high"] >= entry + params.breakeven_at_r * risk:
+                            open_pos["stop_price"] = max(float(open_pos["stop_price"]), entry)
+                            open_pos["be_done"] = True
+                        elif open_pos["direction"] == "short" and bar["low"] <= entry - params.breakeven_at_r * risk:
+                            open_pos["stop_price"] = min(float(open_pos["stop_price"]), entry)
+                            open_pos["be_done"] = True
                 outcome = _check_exit(open_pos, bar, i, max_hold, exit_cost)
                 if outcome is not None:
                     exit_price, reason = outcome
@@ -142,7 +151,7 @@ def run_backtest(
                     open_pos = None
         if open_pos is None and ts in by_bar:
             if params.session_enabled and _no_entry_bar(ts, params):
-                continue  # exit-only bar: no new entries
+                continue
             for _, s in by_bar[ts].iterrows():
                 if i + 1 >= len(df):
                     break
@@ -162,7 +171,9 @@ def run_backtest(
                         continue  # expired unfilled: no trade
                 else:
                     fill_idx = i + 1
-                    if params.session_enabled and not _in_entry_window(df.index[fill_idx], params):
+                    if params.session_enabled and not _in_entry_window(
+                        df.index[fill_idx], params
+                    ):
                         continue
                     fill = _fill_price(str(s["direction"]), df.iloc[i + 1], cost)
                 risk_dist = abs(float(s["stop_price"]) - fill)
@@ -181,6 +192,11 @@ def run_backtest(
                         if "sweep_extreme" in s and pd.notna(s["sweep_extreme"])
                         else None
                     ),
+                    "risk_dist": risk_dist,
+                    "be_done": False,
+                    "expected_r": float(s.get("expected_r", float("nan")))
+                    if pd.notna(s.get("expected_r", float("nan")))
+                    else float("nan"),
                 }
                 open_pos["units"] = equity * params.risk_per_trade_pct / 100.0 / risk_dist
                 break  # one position at a time
@@ -203,7 +219,7 @@ def run_backtest(
     curve = equity_at.ffill()
     curve.name = "equity"
     trades_df = (
-        pd.DataFrame(trades).drop(columns=["entry_idx", "sweep_extreme"])
+        pd.DataFrame(trades).drop(columns=["entry_idx", "sweep_extreme", "risk_dist", "be_done"])
         if trades
         else empty_trades
     )
@@ -225,12 +241,7 @@ def _limit_fill(
     cost: float,
     params: BacktestParams | None = None,
 ) -> tuple[float | None, int]:
-    """First liquid bar after ``i`` (up to ``expiry`` bars out) trading through ``limit``.
-
-    With session params, illiquid bars are skipped (no fill in the 21-00 UTC
-    window) and the search stops at the next flat bar, so resting orders never
-    fill overnight — new slate each morning.
-    """
+    """First liquid bar after ``i`` (up to ``expiry`` bars out) trading through ``limit``."""
     last = min(i + expiry, len(df) - 1)
     if params is not None:
         for k in range(i + 1, last + 1):
@@ -258,20 +269,20 @@ def _hour_utc(ts: Any) -> int:
 
 
 def _weekday_utc(ts: Any) -> int:
-    return int(_as_utc(ts).weekday())  # Monday=0 … Sunday=6
+    return int(_as_utc(ts).weekday())
 
 
 def _in_entry_window(ts: Any, params: BacktestParams) -> bool:
     if _weekday_utc(ts) >= 5:
-        return False  # no weekend entries (crypto prints weekend bars)
+        return False
     t = _as_utc(ts)
     if int(t.weekday()) == 4 and int(t.hour) >= params.entry_end_hour_utc:
-        return False  # Friday late: flat into the weekend, no new risk
+        return False
     start, end = params.entry_start_hour_utc, params.entry_end_hour_utc
     h = int(t.hour)
     if start <= end:
         return start <= h < end
-    return h >= start or h < end  # overnight window, e.g. 22-06
+    return h >= start or h < end
 
 
 def _is_flat_bar(ts: Any, params: BacktestParams) -> bool:
@@ -279,7 +290,6 @@ def _is_flat_bar(ts: Any, params: BacktestParams) -> bool:
 
 
 def _is_dead_bar(ts: Any, params: BacktestParams) -> bool:
-    """Resting orders die here: flat bar, weekend bar, or Friday close."""
     if _is_flat_bar(ts, params):
         return True
     return not _in_entry_window(ts, params) and (
@@ -294,13 +304,6 @@ def _no_entry_bar(ts: Any, params: BacktestParams) -> bool:
 def _should_flat(
     ts: Any, pos: dict[str, Any], bar: pd.Series, params: BacktestParams, exit_cost: float
 ) -> bool:
-    """Flat at 21:00, Friday 20:00 into the weekend, or any later-date bar.
-
-    With ``hold_winners_overnight``, a position showing a profit at the flat
-    bar runs (except Fridays: everything is flat before the weekend). The date
-    backstop covers instruments with no 21:00 bar (metals halt 21:00-22:00
-    UTC): the next tradable bar closes losers instead of carrying them.
-    """
     t = _as_utc(ts)
     if _is_flat_bar(ts, params) or _is_friday_close(t, params) or int(t.weekday()) >= 5:
         if (
@@ -308,7 +311,7 @@ def _should_flat(
             and int(t.weekday()) != 4
             and _unrealized(pos, bar, exit_cost) > 0
         ):
-            return False  # winner runs overnight
+            return False
         return True
     entry_day = _as_utc(pos["entry_ts"]).date()
     if t.date() > entry_day:
