@@ -53,6 +53,9 @@ def _no_fetch(*_a, **_k):
 
 
 def universe() -> list[str]:
+    override = os.environ.get("SWEEP_UNIVERSE")
+    if override:
+        return [p for p in override.split(",") if p]
     return list(get_config().get("data.tradingview.universe"))
 
 
@@ -194,6 +197,31 @@ def sweep_configs() -> list[tuple[str, str, dict, dict]]:
     return [(f"{s} | {c[0]}", s, c[1], c[2] if len(c) > 2 else {}) for c in cfgs]
 
 
+def h1idx_configs() -> list[tuple[str, str, dict, dict]]:
+    """One-knob + combo sweep for breakout_h1 on the index universe."""
+    s = "breakout_h1"
+    cfgs: list[tuple[str, dict]] = [
+        ("base", {}),
+        ("cluster10", {"cluster_ticks": 10}),
+        ("fta20", {"fta_fallback_atr": 2.0}),
+        ("fta30", {"fta_fallback_atr": 3.0}),
+        ("rr15", {"min_reward_risk": 1.5}),
+        ("minswing075", {"min_swing_magnitude_atr": 0.75}),
+        ("tol015", {"touch_tolerance_atr": 0.15}),
+        ("buf05", {"stop_buffer_atr": 0.5}),
+        ("c1 cl10+fta30", {"cluster_ticks": 10, "fta_fallback_atr": 3.0}),
+        (
+            "c2 c1+rr15",
+            {"cluster_ticks": 10, "fta_fallback_atr": 3.0, "min_reward_risk": 1.5},
+        ),
+        (
+            "c3 c1+minswing075",
+            {"cluster_ticks": 10, "fta_fallback_atr": 3.0, "min_swing_magnitude_atr": 0.75},
+        ),
+    ]
+    return [(f"{s} | {lbl}", s, r, {}) for lbl, r in cfgs]
+
+
 def fade_configs() -> list[tuple[str, str, dict, dict]]:
     s = "fade_d"
     cfgs: list[tuple[str, str, dict, dict]] = [
@@ -235,6 +263,8 @@ def main() -> None:
             rows = run_configs(pool, sweep_configs())
         elif mode == "fade":
             rows = run_configs(pool, fade_configs())
+        elif mode == "h1idx":
+            rows = run_configs(pool, h1idx_configs())
         else:
             print(f"unknown mode: {mode}")
             sys.exit(1)
@@ -252,6 +282,7 @@ def _append_2(rows: list[dict]) -> None:
             **{k: v for k, v in r.items() if k not in ("r_over", "bt_over")},
             "r_over": str(r["r_over"]),
             "bt_over": str(r["bt_over"]),
+            "universe": os.environ.get("SWEEP_UNIVERSE", "fx"),
         }
         for r in rows
     ]
