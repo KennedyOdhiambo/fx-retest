@@ -4,11 +4,8 @@ Ad-hoc (but reproducible) research tooling used to stress-test the retest
 strategy and two structural rewrites on cached H1/D data, across two
 universes: the 11-pair FX/metal/BTC book and six index CFDs, plus (2026-10)
 cross-asset breadth studies — trend/momentum and mean reversion — over 71
-instruments in six asset classes. The crypto chapter (funding carry plus the
-perp volume-momentum lab) moved to the sibling **`crypto-lab`** project in
-2026-10; see its `research/` for the ported scripts, corrected-convention
-results and the original logs under `logs/legacy/`. Run everything **from the
-repo root** (data loading uses relative cache paths).
+instruments in six asset classes. Run everything **from the repo root** (data
+loading uses relative cache paths).
 
 ## Scripts
 
@@ -23,10 +20,6 @@ repo root** (data loading uses relative cache paths).
 | `vecbt.py` | vectorized daily portfolio backtester for breadth studies: signals on closes, applied next bar, equal 1/N weights, per-instrument vol scaling, costs per position change, block-bootstrap random gate |
 | `study_tsmom.py` | **Study A (trend breadth)**: Donchian 50/20 + 12m TSMOM across 71 instruments / 6 classes, 2005-2026, gate + cost sensitivity + SMA200 long-only retail filter |
 | `study_meanrev.py` | **Study B (mean reversion)**: Connors RSI(2) dip-buy on 6 indices + 27 US stocks vs equal-weight buy-and-hold; XAU/XAG ratio z-score spread probe |
-
-The crypto studies (`study_funding.py`, `study_crypto*.py`, `fetch_binance.py`)
-moved to the sibling **`crypto-lab`** project (2026-10), together with their
-logs; that project re-runs the same studies under corrected engine conventions.
 
 Variant strategies themselves live in `src/retest/strategies/`
 (`mtf.py`, `breakout.py`, `fade.py`), tested in `tests/test_strategies.py`.
@@ -110,9 +103,9 @@ by a spawn-worker bug that ignored the strategy argument and re-ran breakout_d;
 
 ### Cross-asset breadth studies (2026-10, `vecbt.py` portfolio sim)
 
-After the retest book was shelved, three *different* families were tested
-across every asset class with cached history — trend/momentum, mean reversion,
-funding carry — on daily closes, next-bar execution, equal 1/N weights,
+After the retest book was shelved, two *different* families were tested
+across every asset class with cached history — trend/momentum and mean
+reversion — on daily closes, next-bar execution, equal 1/N weights,
 per-instrument vol scaling, 3 bps per position change (6 bps sensitivity), and
 a block-bootstrap random gate (shuffle each instrument's returns against the
 same positions; p = P[shuffled ≥ actual]). The universe was extended with 12
@@ -153,24 +146,5 @@ equal-weight buy-and-hold of the same instruments.
   returns with shallower drawdowns. A real timing effect, not an edge beyond
   being long — at best a capital-efficient participation sleeve.
 - XAU/XAG ratio z-score(60) spread probe: dead (Sharpe −0.03, gate p=0.51).
-
-**Studies C/D — crypto (moved to the sibling project `crypto-lab`, 2026-10).**
-Binance USDT perps, 10 majors, full perp history, full fapi field set (volume,
-quote volume, trades, taker-buy). Two findings survived the program:
-**delta-neutral funding carry** (hedged spot+perp; ~8-10%/yr net of fees,
-Sharpe 6-8 on a $10k/symbol book, positive in both split halves — the only
-persistent positive-expectancy stream found) and **30-day volume-weighted
-momentum** (`obv_30` / `vwr_30` — the only directional family to pass every
-kill test; legacy conventions: long-only Sharpe 0.87-0.97, 10/10 symbols
-positive, gate p=0.005, leave-one-out and cost robust, 7/8 years positive; the
-30-day horizon is the peak of a 20-35 day plateau; the last 12 months
-softened). Everything else failed — plain trend, SMA crosses, taker-flow,
-1-day reversal.
-
-All crypto code, data tooling, kill tests, and the strategy built from the two
-findings now live in `../crypto-lab` (corrected engine conventions there:
-long-only Sharpe 1.26/1.27; carry policy B 10.15%/yr, Sharpe 7.7; the port
-reproduces the legacy numbers to the digit under legacy flags). The original
-logs from this repo are preserved in that project under `research/logs/legacy/`.
 
 
