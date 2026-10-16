@@ -1,0 +1,20 @@
+breakout | m15 | ungated | signals=62
+/Users/kennedyodhiambo/Desktop/finance/retest/src/retest/validation/significance.py:52: RuntimeWarning: invalid value encountered in sqrt
+  sr_std = float(np.sqrt((1.0 - skew * sr + kurt * sr**2 / 4.0) / (len(r) - 1.0)))
+  ungated                            n=  49 pnl=    -1502 pf= 0.51 wr=0.37 mdd=0.148 sharpe= -5.05 [ -6.21]
+breakout | m15 | gate ['d', 50] | signals 62->35
+  gate D-SMA50                       n=  29 pnl=     -529 pf= 0.68 wr=0.45 mdd=0.069 sharpe= -2.01 [ -2.55]
+breakout | m15 | gate ['h4', 100] | signals 62->40
+  gate H4-SMA100                     n=  30 pnl=     -691 pf= 0.63 wr=0.43 mdd=0.084 sharpe= -2.85 [ -3.55]
+breakout | m15 | gate ['d', 20] | signals 62->38
+  gate D-SMA20                       n=  29 pnl=     -590 pf= 0.67 wr=0.45 mdd=0.074 sharpe= -2.36 [ -2.97]
+breakout | m5 | ungated | signals=88
+/Users/kennedyodhiambo/Desktop/finance/retest/src/retest/validation/significance.py:52: RuntimeWarning: invalid value encountered in sqrt
+  sr_std = float(np.sqrt((1.0 - skew * sr + kurt * sr**2 / 4.0) / (len(r) - 1.0)))
+  ungated                            n=  63 pnl=    -2752 pf= 0.36 wr=0.30 mdd=0.267 sharpe= -8.06 [ -9.88]
+breakout | m5 | gate ['d', 50] | signals 88->51
+  gate D-SMA50                       n=  40 pnl=     -884 pf= 0.67 wr=0.40 mdd=0.123 sharpe= -2.44 [ -3.07]
+breakout | m5 | gate ['h4', 100] | signals 88->62
+  gate H4-SMA100                     n=  44 pnl=    -1132 pf= 0.63 wr=0.39 mdd=0.147 sharpe= -3.07 [ -3.82]
+breakout | m5 | gate ['d', 20] | signals 88->56
+  gate D-SMA20                       n=  41 pnl=     -832 pf= 0.70 wr=0.41 mdd=0.118 sharpe= -2.28 [ -2.87]

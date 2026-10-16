@@ -1,0 +1,19 @@
+validating strat=breakout_d r_over={} bt_over={}
+--- full (13s) ---
+full:breakout_d                n=  26 pnl=    -86.8 pf=  0.93 wr=0.35 mdd=0.061 sharpe= -0.19 [ -0.27] psr=0.00
+symbol  n        pnl       wr
+  FGBL 26 -86.829005 0.346154
+
+--- OOS last 25% (25s) ---
+oos:breakout_d                 n=  10 pnl=    106.3 pf=  1.26 wr=0.40 mdd=0.027 sharpe=  0.17 [  0.00] psr=0.99
+
+--- walk-forward (26s) ---
+2025-10-02: n=   5 pnl=    208.6 wr=0.20
+2026-01-02: n=   6 pnl=     56.9 wr=0.33
+2026-04-03: n=   4 pnl=   -206.9 wr=0.25
+2026-07-03: n=   6 pnl=    349.0 wr=0.50
+wf-pooled:breakout_d           n=  21 pnl=    407.6 pf=  1.50 wr=0.33 mdd=0.029 sharpe=  0.15 [  0.05] psr=1.00
+
+--- random baseline (26s) ---
+FGBL     n_sig=  26 rand_mean=  -590.17 p=1.000 -> PASS
+random gate: 1/1 pairs pass (need all)

@@ -14,6 +14,7 @@ universes: the 11-pair FX/metal/BTC book and six index CFDs. Run everything
 | `sweep_final.py` | kill-test for a retest config: full sample, OOS last 25%, walk-forward windows, random-entry gate |
 | `sweep_final2.py` | same kill-test for the variants: `python research/sweep_final2.py <strat> '<r_over json>' ['<bt_over json>']` |
 | `sweep_daily.py` | daily-history long-run test (2002-2026): breakout + retest on daily bars, session off, one signal pass per symbol, yearly/quarterly regime view (`quick|full|costs` modes) |
+| `sweep_bund.py` | Euro-Bund (FGBL) intraday test: M5 execution, levels from D/H4/H1/M15/M5, optional HTF SMA trend gates (`smoke|gate|final` modes) |
 
 Variant strategies themselves live in `src/retest/strategies/`
 (`mtf.py`, `breakout.py`, `fade.py`), tested in `tests/test_strategies.py`.
@@ -68,6 +69,26 @@ backward-looking), session rules off, nothing tuned.
 Verdict: the retest book is shelved; the only non-curve-fit lead is daily
 breakout momentum on commodities, with a measured edge too small to trade
 as-is.
+
+### Bund (FGBL) 5-minute test (2026-10, ~29 trading days of M5, 1.8y H1)
+
+Euro-Bund via `EUREX:FGBL1!` (TV feed; anonymous M5 history is capped at
+~1.4 months, so this is a smoke-level verdict by construction). M5 execution
+throughout (entries/exits/ATR/stops); level frames D/H4/H1/M15/M5; optional
+D/H4 SMA trend gates on signals.
+
+- Everything loses: breakout on H1 levels −548 (33 trades, PF 0.76), M15
+  levels −1502 (PF 0.51), M5 levels −2752 (PF 0.36). Retest family: 0–13
+  trades, negative.
+- HTF trend gates roughly halve the damage (PF 0.36 → 0.70, WR 30% → 41%)
+  but never flip it; kill test on the least-bad variant (M5 levels + D-SMA20
+  gate): −832, PF 0.70, 1 of 5 weeks positive; at 3x costs PF 0.22. Random
+  gate passes.
+- Longer-sample cross-check (same family, H1 execution, 1.8y): H1-level
+  breakout −537 with WF pooled −923; D-level breakout flat noise (26 trades).
+- Verdict: the Bund joins the list — no edge on any timeframe tested. The M5
+  window is too short for more than a smoke verdict, but nothing here
+  justifies deeper-history engineering.
 
 Raw evidence: `results/` (CSV of every config tried, appended; the `universe`
 column tags the source book — rows before 2026-10-16 are FX) and `logs/`

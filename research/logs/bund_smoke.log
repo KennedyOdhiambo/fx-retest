@@ -1,0 +1,27 @@
+frames: m5=6948 h1=9529 h4=2628 d=5030
+m5 window: 2026-09-07 00:15:00+00:00 -> 2026-10-16 05:00:00+00:00
+
+breakout | d levels | signals=2
+  breakout | d                       n=   2 pnl=     -221 pf= 0.00 wr=0.00 mdd=0.011 sharpe= -4.40 [ -6.18]
+breakout | h4 levels | signals=12
+  breakout | h4                      n=  12 pnl=     -345 pf= 0.62 wr=0.25 mdd=0.065 sharpe= -0.81 [ -1.19]
+breakout | h1 levels | signals=34
+  breakout | h1                      n=  33 pnl=     -548 pf= 0.76 wr=0.36 mdd=0.086 sharpe= -2.50 [ -3.14]
+breakout | m15 levels | signals=62
+/Users/kennedyodhiambo/Desktop/finance/retest/src/retest/validation/significance.py:52: RuntimeWarning: invalid value encountered in sqrt
+  sr_std = float(np.sqrt((1.0 - skew * sr + kurt * sr**2 / 4.0) / (len(r) - 1.0)))
+  breakout | m15                     n=  49 pnl=    -1502 pf= 0.51 wr=0.37 mdd=0.148 sharpe= -5.05 [ -6.21]
+breakout | m5 levels | signals=88
+/Users/kennedyodhiambo/Desktop/finance/retest/src/retest/validation/significance.py:52: RuntimeWarning: invalid value encountered in sqrt
+  sr_std = float(np.sqrt((1.0 - skew * sr + kurt * sr**2 / 4.0) / (len(r) - 1.0)))
+  breakout | m5                      n=  63 pnl=    -2752 pf= 0.36 wr=0.30 mdd=0.267 sharpe= -8.06 [ -9.88]
+retest | d levels | signals=0
+  retest | d                         no trades
+retest | h4 levels | signals=3
+  retest | h4                        n=   3 pnl=     -108 pf= 0.53 wr=0.33 mdd=0.023 sharpe= -3.79 [ -4.73]
+retest | h1 levels | signals=9
+  retest | h1                        n=   9 pnl=     -230 pf= 0.66 wr=0.33 mdd=0.045 sharpe= -0.69 [ -1.04]
+retest | m15 levels | signals=12
+  retest | m15                       n=  10 pnl=     -916 pf= 0.03 wr=0.20 mdd=0.080 sharpe= -8.83 [-11.47]
+retest | m5 levels | signals=16
+  retest | m5                        n=  13 pnl=      -45 pf= 0.94 wr=0.54 mdd=0.037 sharpe= -0.43 [ -0.77]
