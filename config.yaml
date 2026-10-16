@@ -94,6 +94,12 @@ backtest:
     XAG_USD: 0.01
     WTI_USD: 0.01
     BTC_USD: 1.0
+    SPX500_USD: 1.0         # 1 index point; spread/slippage in points
+    NAS100_USD: 1.0
+    US30_USD: 1.0
+    DE30_EUR: 1.0
+    UK100_GBP: 1.0
+    JP225_USD: 1.0
   risk_per_trade_pct: 1.0    # fixed-fractional risk per trade; one position at a time
   min_equity: 10000          # starting equity
   max_hold_bars: 120         # timeout exit, bars after entry
