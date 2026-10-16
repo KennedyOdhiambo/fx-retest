@@ -1,0 +1,49 @@
+--- full sample (17s) ---
+full:E7-entryStart7          n=  22 pnl=   1168.9 pf=  2.31 wr=0.45 mdd=0.042 sharpe=  0.81 [  0.72] psr=1.00
+ symbol  n         pnl       wr
+EUR_USD  0    0.000000      NaN
+GBP_USD  1   68.981132 1.000000
+USD_JPY  1  184.503802 1.000000
+USD_CHF  5 -296.725638 0.200000
+AUD_USD  2  207.105411 1.000000
+USD_CAD  4  101.994624 0.500000
+NZD_USD  0    0.000000      NaN
+XAU_USD  6  585.528537 0.333333
+XAG_USD  0    0.000000      NaN
+WTI_USD  0    0.000000      NaN
+BTC_USD  3  317.482448 0.333333
+
+--- OOS last 25% (32s) ---
+oos:E7-entryStart7           n=   7 pnl=   -403.8 pf=  0.15 wr=0.14 mdd=0.040 sharpe= -2.46 [ -2.79] psr=0.00
+ symbol  n         pnl
+EUR_USD  0    0.000000
+GBP_USD  1   68.981132
+USD_JPY  0    0.000000
+USD_CHF  1 -106.569977
+AUD_USD  0    0.000000
+USD_CAD  1 -107.558988
+NZD_USD  0    0.000000
+XAU_USD  2  -59.305219
+XAG_USD  0    0.000000
+WTI_USD  0    0.000000
+BTC_USD  2 -199.339235
+
+--- walk-forward windows (35s) ---
+2025-10-02: n=  4 pnl=   -43.6 wr=0.25
+2026-01-02: n=  6 pnl=  -335.6 wr=0.17
+2026-04-03: n=  7 pnl=  -291.0 wr=0.14
+2026-07-03: n=  3 pnl=  -138.8 wr=0.33
+wf-pooled:E7-entryStart7     n=  20 pnl=   -809.0 pf=  0.35 wr=0.20 mdd=0.098 sharpe= -2.22 [ -2.41] psr=0.00
+
+--- random baseline per pair (35s) ---
+EUR_USD  n_sig=  0 rand_mean=  -22.63 p=0.812 -> PASS
+GBP_USD  n_sig=  1 rand_mean=  -50.30 p=0.980 -> PASS
+USD_JPY  n_sig=  3 rand_mean=  -70.17 p=0.905 -> PASS
+USD_CHF  n_sig=  9 rand_mean= -188.50 p=0.998 -> PASS
+AUD_USD  n_sig=  3 rand_mean=  -74.63 p=0.962 -> PASS
+USD_CAD  n_sig=  4 rand_mean= -125.64 p=0.998 -> PASS
+NZD_USD  n_sig=  0 rand_mean=  -33.96 p=0.914 -> PASS
+XAU_USD  n_sig=  8 rand_mean=    3.41 p=0.480 -> PASS
+XAG_USD  n_sig=  0 rand_mean=   29.62 p=0.176 -> PASS
+WTI_USD  n_sig=  0 rand_mean=   21.54 p=0.245 -> PASS
+BTC_USD  n_sig=  3 rand_mean=  -50.38 p=0.847 -> PASS

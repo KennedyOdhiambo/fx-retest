@@ -1,0 +1,120 @@
+[   22s] baseline(current config) done
+[   39s] swing_lookback=3 done
+[   42s] swing_lookback=5 done
+[   52s] swing_lookback=6 done
+[   57s] swing_lookback=8 done
+[   74s] cluster_ticks=3 done
+[   85s] cluster_ticks=10 done
+[   94s] cluster_ticks=20 done
+[  107s] min_swing_magnitude_atr=0.15 done
+[  118s] min_swing_magnitude_atr=0.5 done
+[  128s] min_swing_magnitude_atr=0.75 done
+[  144s] touch_tolerance_atr=0.15 done
+[  155s] touch_tolerance_atr=0.45 done
+[  169s] max_break_return_bars=12 done
+[  181s] max_break_return_bars=36 done
+[  195s] max_break_return_bars=48 done
+[  208s] min_reward_risk=0.75 done
+[  220s] min_reward_risk=1.5 done
+[  233s] min_reward_risk=2.0 done
+[  246s] min_stop_atr=0.5 done
+[  259s] min_stop_atr=1.0 done
+[  272s] stop_buffer_atr=0.4 done
+[  286s] stop_buffer_atr=0.6 done
+[  298s] fta_fallback_atr=1.5 done
+[  312s] fta_fallback_atr=3.0 done
+[  326s] limit_expiry_bars=12 done
+[  340s] limit_expiry_bars=48 done
+[  362s] max_level_age_days=0 done
+[  369s] max_level_age_days=120 done
+[  373s] min_swings_per_level=2 done
+[  379s] ban_one_touch=True done
+[  398s] long_extra_confirmations=1 done
+[  410s] special_fib_rule=False done
+[  423s] entry_start_hour_utc=0 done
+[  436s] entry_start_hour_utc=7 done
+[  447s] entry_start_hour_utc=13 done
+[  461s] gates:strategy.md done
+[  474s] gates:strict done
+[  488s] bt:max_hold_bars=60 done
+[  501s] bt:max_hold_bars=240 done
+[  514s] bt:breakeven_at_r=1.0 done
+[  521s] bt:hold_winners_overnight=False done
+baseline(current config)                 n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+swing_lookback=3                         n=  38 pnl=    785.6 sharpe=  0.58 [  0.50] pf=  1.42 wr=0.42 mdd=0.049
+swing_lookback=5                         n=  28 pnl=    341.4 sharpe=  0.23 [  0.15] pf=  1.21 wr=0.29 mdd=0.069
+swing_lookback=6                         n=  30 pnl=    532.3 sharpe=  0.25 [  0.17] pf=  1.30 wr=0.30 mdd=0.079
+swing_lookback=8                         n=  24 pnl=   1197.6 sharpe=  0.60 [  0.51] pf=  1.93 wr=0.38 mdd=0.058
+cluster_ticks=3                          n=  28 pnl=    877.1 sharpe=  0.61 [  0.52] pf=  1.62 wr=0.39 mdd=0.046
+cluster_ticks=10                         n=  31 pnl=    546.8 sharpe=  0.41 [  0.33] pf=  1.32 wr=0.35 mdd=0.059
+cluster_ticks=20                         n=  31 pnl=    -36.1 sharpe=  0.07 [ -0.01] pf=  0.98 wr=0.23 mdd=0.106
+min_swing_magnitude_atr=0.15             n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+min_swing_magnitude_atr=0.5              n=  28 pnl=   1047.3 sharpe=  0.71 [  0.62] pf=  1.81 wr=0.43 mdd=0.045
+min_swing_magnitude_atr=0.75             n=  30 pnl=   1100.4 sharpe=  0.67 [  0.58] pf=  1.82 wr=0.43 mdd=0.037
+touch_tolerance_atr=0.15                 n=  41 pnl=   -443.4 sharpe= -0.16 [ -0.23] pf=  0.83 wr=0.29 mdd=0.103
+touch_tolerance_atr=0.45                 n=  29 pnl=   -424.2 sharpe= -0.30 [ -0.38] pf=  0.76 wr=0.34 mdd=0.080
+max_break_return_bars=12                 n=  25 pnl=    550.8 sharpe=  0.36 [  0.28] pf=  1.47 wr=0.40 mdd=0.046
+max_break_return_bars=36                 n=  30 pnl=   1075.3 sharpe=  0.71 [  0.63] pf=  1.77 wr=0.43 mdd=0.034
+max_break_return_bars=48                 n=  34 pnl=    743.0 sharpe=  0.52 [  0.43] pf=  1.43 wr=0.38 mdd=0.050
+min_reward_risk=0.75                     n=  35 pnl=    671.8 sharpe=  0.48 [  0.40] pf=  1.39 wr=0.37 mdd=0.048
+min_reward_risk=1.5                      n=  22 pnl=    797.4 sharpe=  0.58 [  0.49] pf=  1.67 wr=0.32 mdd=0.043
+min_reward_risk=2.0                      n=  19 pnl=    555.7 sharpe=  0.38 [  0.30] pf=  1.52 wr=0.26 mdd=0.050
+min_stop_atr=0.5                         n=  70 pnl=    748.2 sharpe=  0.38 [  0.30] pf=  1.17 wr=0.34 mdd=0.119
+min_stop_atr=1.0                         n=  11 pnl=    460.4 sharpe=  0.58 [  0.48] pf=  1.93 wr=0.36 mdd=0.030
+stop_buffer_atr=0.4                      n=  51 pnl=    137.2 sharpe=  0.16 [  0.08] pf=  1.04 wr=0.27 mdd=0.128
+stop_buffer_atr=0.6                      n=  80 pnl=    461.2 sharpe=  0.06 [ -0.02] pf=  1.11 wr=0.30 mdd=0.141
+fta_fallback_atr=1.5                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+fta_fallback_atr=3.0                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+limit_expiry_bars=12                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+limit_expiry_bars=48                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+max_level_age_days=0                     n=  57 pnl=    476.0 sharpe=  0.29 [  0.22] pf=  1.17 wr=0.40 mdd=0.064
+max_level_age_days=120                   n=  23 pnl=    430.5 sharpe=  0.28 [  0.20] pf=  1.38 wr=0.39 mdd=0.038
+ban_one_touch=True                       n=  20 pnl=    985.3 sharpe=  0.69 [  0.60] pf=  1.98 wr=0.40 mdd=0.032
+min_swings_per_level=2                   n=   8 pnl=    546.2 sharpe= -0.16 [ -0.24] pf=  2.37 wr=0.50 mdd=0.037
+long_extra_confirmations=1               n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+special_fib_rule=False                   n=  33 pnl=   1056.4 sharpe=  0.68 [  0.60] pf=  1.65 wr=0.42 mdd=0.046
+entry_start_hour_utc=0                   n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+entry_start_hour_utc=7                   n=  22 pnl=   1168.9 sharpe=  0.81 [  0.72] pf=  2.31 wr=0.45 mdd=0.042
+entry_start_hour_utc=13                  n=  13 pnl=    795.5 sharpe=  0.77 [  0.68] pf=  3.41 wr=0.54 mdd=0.025
+gates:strategy.md                        n=  22 pnl=   1014.2 sharpe=  0.70 [  0.62] pf=  1.95 wr=0.41 mdd=0.037
+gates:strict                             n=  21 pnl=   1119.7 sharpe=  0.77 [  0.68] pf=  2.17 wr=0.43 mdd=0.028
+bt:max_hold_bars=60                      n=  29 pnl=    901.8 sharpe=  0.64 [  0.55] pf=  1.64 wr=0.41 mdd=0.046
+bt:max_hold_bars=240                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41 mdd=0.046
+bt:breakeven_at_r=1.0                    n=  29 pnl=   -194.9 sharpe= -0.06 [ -0.14] pf=  0.82 wr=0.14 mdd=0.036
+bt:hold_winners_overnight=False          n=  29 pnl=    548.4 sharpe=  0.63 [  0.54] pf=  1.43 wr=0.48 mdd=0.046
+
+42 configs in 522s -> alpha_sweep_results.csv
+
+=== sorted by pnl ===
+swing_lookback=8                         n=  24 pnl=   1197.6 sharpe=  0.60 [  0.51] pf=  1.93 wr=0.38
+entry_start_hour_utc=7                   n=  22 pnl=   1168.9 sharpe=  0.81 [  0.72] pf=  2.31 wr=0.45
+gates:strict                             n=  21 pnl=   1119.7 sharpe=  0.77 [  0.68] pf=  2.17 wr=0.43
+min_swing_magnitude_atr=0.75             n=  30 pnl=   1100.4 sharpe=  0.67 [  0.58] pf=  1.82 wr=0.43
+max_break_return_bars=36                 n=  30 pnl=   1075.3 sharpe=  0.71 [  0.63] pf=  1.77 wr=0.43
+special_fib_rule=False                   n=  33 pnl=   1056.4 sharpe=  0.68 [  0.60] pf=  1.65 wr=0.42
+min_swing_magnitude_atr=0.5              n=  28 pnl=   1047.3 sharpe=  0.71 [  0.62] pf=  1.81 wr=0.43
+gates:strategy.md                        n=  22 pnl=   1014.2 sharpe=  0.70 [  0.62] pf=  1.95 wr=0.41
+ban_one_touch=True                       n=  20 pnl=    985.3 sharpe=  0.69 [  0.60] pf=  1.98 wr=0.40
+baseline(current config)                 n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+min_swing_magnitude_atr=0.15             n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+fta_fallback_atr=1.5                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+fta_fallback_atr=3.0                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+limit_expiry_bars=12                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+limit_expiry_bars=48                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+
+=== sorted by sharpe (n>=20) ===
+entry_start_hour_utc=7                   n=  22 pnl=   1168.9 sharpe=  0.81 [  0.72] pf=  2.31 wr=0.45
+gates:strict                             n=  21 pnl=   1119.7 sharpe=  0.77 [  0.68] pf=  2.17 wr=0.43
+max_break_return_bars=36                 n=  30 pnl=   1075.3 sharpe=  0.71 [  0.63] pf=  1.77 wr=0.43
+min_swing_magnitude_atr=0.5              n=  28 pnl=   1047.3 sharpe=  0.71 [  0.62] pf=  1.81 wr=0.43
+gates:strategy.md                        n=  22 pnl=   1014.2 sharpe=  0.70 [  0.62] pf=  1.95 wr=0.41
+ban_one_touch=True                       n=  20 pnl=    985.3 sharpe=  0.69 [  0.60] pf=  1.98 wr=0.40
+special_fib_rule=False                   n=  33 pnl=   1056.4 sharpe=  0.68 [  0.60] pf=  1.65 wr=0.42
+min_swing_magnitude_atr=0.75             n=  30 pnl=   1100.4 sharpe=  0.67 [  0.58] pf=  1.82 wr=0.43
+baseline(current config)                 n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+min_swing_magnitude_atr=0.15             n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+fta_fallback_atr=1.5                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+fta_fallback_atr=3.0                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+limit_expiry_bars=12                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+limit_expiry_bars=48                     n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41
+long_extra_confirmations=1               n=  29 pnl=    940.0 sharpe=  0.64 [  0.56] pf=  1.67 wr=0.41

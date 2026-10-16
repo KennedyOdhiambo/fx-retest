@@ -1,0 +1,39 @@
+validating strat=fade_d r_over={'min_swing_magnitude_atr': 0.75} bt_over={}
+--- full (58s) ---
+full:fade_d                    n= 155 pnl=    718.4 pf=  1.09 wr=0.34 mdd=0.155 sharpe=  0.27 [  0.19] psr=1.00
+ symbol  n         pnl       wr
+EUR_USD 14   14.136149 0.357143
+GBP_USD  7  -16.389909 0.428571
+USD_JPY 17  128.156517 0.352941
+USD_CHF 23 -180.845300 0.347826
+AUD_USD 11 -119.830383 0.454545
+USD_CAD 15   16.269510 0.400000
+NZD_USD  9  260.683765 0.333333
+XAU_USD 20  -70.932586 0.250000
+XAG_USD 15  510.633712 0.400000
+WTI_USD  3  -40.299822 0.333333
+BTC_USD 21  216.776197 0.238095
+
+--- OOS last 25% (116s) ---
+oos:fade_d                     n=  33 pnl=  -1341.4 pf=  0.33 wr=0.21 mdd=0.132 sharpe= -2.90 [ -3.26] psr=0.00
+
+--- walk-forward (119s) ---
+2025-10-02: n=  31 pnl=   1634.3 wr=0.48
+2026-01-02: n=  36 pnl=  -1045.7 wr=0.22
+2026-04-03: n=  27 pnl=    388.9 wr=0.33
+2026-07-03: n=  33 pnl=  -1144.6 wr=0.18
+wf-pooled:fade_d               n= 119 pnl=    -82.9 pf=  0.99 wr=0.29 mdd=0.148 sharpe=  0.04 [ -0.06] psr=0.61
+
+--- random baseline (119s) ---
+EUR_USD  n_sig=  14 rand_mean=  -215.20 p=0.999 -> PASS
+GBP_USD  n_sig=   7 rand_mean=  -114.99 p=0.964 -> PASS
+USD_JPY  n_sig=  21 rand_mean=  -137.86 p=0.865 -> PASS
+USD_CHF  n_sig=  25 rand_mean=  -353.56 p=0.998 -> PASS
+AUD_USD  n_sig=  14 rand_mean=  -293.76 p=0.999 -> PASS
+USD_CAD  n_sig=  17 rand_mean=   -82.98 p=0.896 -> PASS
+NZD_USD  n_sig=  12 rand_mean=  -212.50 p=0.989 -> PASS
+XAU_USD  n_sig=  27 rand_mean=   -75.94 p=0.723 -> PASS
+XAG_USD  n_sig=  15 rand_mean=  -163.40 p=0.948 -> PASS
+WTI_USD  n_sig=   3 rand_mean=    37.42 p=0.173 -> PASS
+BTC_USD  n_sig=  23 rand_mean=   -53.36 p=0.644 -> PASS
+random gate: 11/11 pairs pass (need all)

@@ -1,0 +1,56 @@
+[   20s] D1 C8+rr15 done
+[   28s] D2 C8+minswing075 done
+[   40s] D3 C8+minstop05 done
+[   52s] D4 C8+minstop10 done
+[   61s] D5 C8+ban1 done
+[   75s] D6 C8+break48 done
+[   77s] D7 C8+lookback8 done
+[   95s] D8 C8+age120 done
+[  107s] D9 C8+end16 done
+[  119s] D10 C8+gates2 done
+[  132s] D11 C8+longextra1 done
+[  145s] D12 C8+hold240 done
+[  159s] D13 C8+tol015 done
+[  171s] D14 C8+buf01 done
+[  178s] D15 C8+rr2 done
+D1 C8+rr15                               n=  14 pnl=   1673.3 sharpe=  1.18 [  1.07] pf=  4.79 wr=0.50 mdd=0.014
+D2 C8+minswing075                        n=  24 pnl=   1449.3 sharpe=  0.87 [  0.78] pf=  2.48 wr=0.50 mdd=0.033
+D3 C8+minstop05                          n=  39 pnl=   1500.2 sharpe=  0.71 [  0.62] pf=  1.69 wr=0.38 mdd=0.069
+D4 C8+minstop10                          n=  11 pnl=    557.0 sharpe=  0.69 [  0.60] pf=  2.17 wr=0.45 mdd=0.016
+D5 C8+ban1                               n=  19 pnl=   1674.1 sharpe=  1.05 [  0.96] pf=  3.41 wr=0.53 mdd=0.014
+D6 C8+break48                            n=  24 pnl=   1475.1 sharpe=  0.93 [  0.84] pf=  2.50 wr=0.46 mdd=0.026
+D7 C8+lookback8                          n=  18 pnl=   1357.9 sharpe=  0.38 [  0.29] pf=  2.47 wr=0.39 mdd=0.044
+D8 C8+age120                             n=  16 pnl=   1253.4 sharpe=  0.96 [  0.87] pf=  3.60 wr=0.56 mdd=0.015
+D9 C8+end16                              n=  17 pnl=   1187.6 sharpe=  0.81 [  0.72] pf=  2.58 wr=0.47 mdd=0.015
+D10 C8+gates2                            n=   8 pnl=   1321.6 sharpe=  0.97 [  0.87] pf=  5.77 wr=0.62 mdd=0.015
+D11 C8+longextra1                        n=  11 pnl=   1691.4 sharpe=  1.13 [  1.03] pf=  7.05 wr=0.64 mdd=0.015
+D12 C8+hold240                           n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52 mdd=0.014
+D13 C8+tol015                            n=  29 pnl=    129.3 sharpe=  0.21 [  0.13] pf=  1.08 wr=0.34 mdd=0.070
+D14 C8+buf01                             n=  17 pnl=   1461.6 sharpe=  0.84 [  0.75] pf=  2.62 wr=0.47 mdd=0.029
+D15 C8+rr2                               n=  11 pnl=   1432.6 sharpe=  0.76 [  0.66] pf=  5.29 wr=0.45 mdd=0.015
+
+15 configs in 179s -> alpha_sweep_results.csv
+
+=== sorted by pnl ===
+D12 C8+hold240                           n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52
+D11 C8+longextra1                        n=  11 pnl=   1691.4 sharpe=  1.13 [  1.03] pf=  7.05 wr=0.64
+D5 C8+ban1                               n=  19 pnl=   1674.1 sharpe=  1.05 [  0.96] pf=  3.41 wr=0.53
+D1 C8+rr15                               n=  14 pnl=   1673.3 sharpe=  1.18 [  1.07] pf=  4.79 wr=0.50
+D3 C8+minstop05                          n=  39 pnl=   1500.2 sharpe=  0.71 [  0.62] pf=  1.69 wr=0.38
+D6 C8+break48                            n=  24 pnl=   1475.1 sharpe=  0.93 [  0.84] pf=  2.50 wr=0.46
+D14 C8+buf01                             n=  17 pnl=   1461.6 sharpe=  0.84 [  0.75] pf=  2.62 wr=0.47
+D2 C8+minswing075                        n=  24 pnl=   1449.3 sharpe=  0.87 [  0.78] pf=  2.48 wr=0.50
+D15 C8+rr2                               n=  11 pnl=   1432.6 sharpe=  0.76 [  0.66] pf=  5.29 wr=0.45
+D7 C8+lookback8                          n=  18 pnl=   1357.9 sharpe=  0.38 [  0.29] pf=  2.47 wr=0.39
+D10 C8+gates2                            n=   8 pnl=   1321.6 sharpe=  0.97 [  0.87] pf=  5.77 wr=0.62
+D8 C8+age120                             n=  16 pnl=   1253.4 sharpe=  0.96 [  0.87] pf=  3.60 wr=0.56
+D9 C8+end16                              n=  17 pnl=   1187.6 sharpe=  0.81 [  0.72] pf=  2.58 wr=0.47
+D4 C8+minstop10                          n=  11 pnl=    557.0 sharpe=  0.69 [  0.60] pf=  2.17 wr=0.45
+D13 C8+tol015                            n=  29 pnl=    129.3 sharpe=  0.21 [  0.13] pf=  1.08 wr=0.34
+
+=== sorted by sharpe (n>=20) ===
+D12 C8+hold240                           n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52
+D6 C8+break48                            n=  24 pnl=   1475.1 sharpe=  0.93 [  0.84] pf=  2.50 wr=0.46
+D2 C8+minswing075                        n=  24 pnl=   1449.3 sharpe=  0.87 [  0.78] pf=  2.48 wr=0.50
+D3 C8+minstop05                          n=  39 pnl=   1500.2 sharpe=  0.71 [  0.62] pf=  1.69 wr=0.38
+D13 C8+tol015                            n=  29 pnl=    129.3 sharpe=  0.21 [  0.13] pf=  1.08 wr=0.34

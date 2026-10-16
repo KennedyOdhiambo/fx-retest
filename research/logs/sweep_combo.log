@@ -1,0 +1,55 @@
+[   24s] C1 start7+strict done
+[   37s] C2 start7+strict+break36 done
+[   47s] C3 start7+strict+fibOff done
+[   59s] C4 start7+strict+minswing05 done
+[   68s] C5 start7+strict+ban1 done
+[   74s] C6 start7+strict+lookback8 done
+[   92s] C7 start7+strict+break36+minswing05 done
+[  104s] C8 start7+strict+break36+fibOff done
+[  117s] C9 start13+strict done
+[  130s] C10 start7+md+fibOff+break36 done
+[  132s] C11 start7+lookback8 done
+[  139s] C12 kitchen-sink done
+[  157s] C13 start7+strict+rr15 done
+[  169s] C14 start9+strict done
+[  174s] C15 start7+strict+minswing075 done
+C1 start7+strict                         n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50 mdd=0.018
+C2 start7+strict+break36                 n=  17 pnl=   1580.4 sharpe=  1.04 [  0.95] pf=  3.87 wr=0.53 mdd=0.014
+C3 start7+strict+fibOff                  n=  20 pnl=   1567.9 sharpe=  1.00 [  0.91] pf=  3.07 wr=0.50 mdd=0.018
+C4 start7+strict+minswing05              n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50 mdd=0.018
+C5 start7+strict+ban1                    n=  14 pnl=   1416.1 sharpe=  0.96 [  0.86] pf=  3.89 wr=0.50 mdd=0.013
+C6 start7+strict+lookback8               n=  16 pnl=   1376.4 sharpe=  0.39 [  0.31] pf=  2.68 wr=0.38 mdd=0.042
+C7 start7+strict+break36+minswing05      n=  18 pnl=   1473.8 sharpe=  0.98 [  0.88] pf=  3.24 wr=0.50 mdd=0.015
+C8 start7+strict+break36+fibOff          n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52 mdd=0.014
+C9 start13+strict                        n=   9 pnl=    858.7 sharpe=  0.82 [  0.72] pf=  5.23 wr=0.56 mdd=0.015
+C10 start7+md+fibOff+break36             n=  22 pnl=   1595.3 sharpe=  1.01 [  0.91] pf=  2.85 wr=0.50 mdd=0.018
+C11 start7+lookback8                     n=  19 pnl=   1225.7 sharpe=  0.63 [  0.54] pf=  2.27 wr=0.37 mdd=0.046
+C12 kitchen-sink                         n=  18 pnl=   1357.9 sharpe=  0.38 [  0.29] pf=  2.47 wr=0.39 mdd=0.044
+C13 start7+strict+rr15                   n=  12 pnl=   1336.2 sharpe=  1.00 [  0.89] pf=  4.03 wr=0.42 mdd=0.015
+C14 start9+strict                        n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50 mdd=0.018
+C15 start7+strict+minswing075            n=  20 pnl=   1388.8 sharpe=  0.86 [  0.77] pf=  2.81 wr=0.50 mdd=0.036
+
+15 configs in 174s -> alpha_sweep_results.csv
+
+=== sorted by pnl ===
+C8 start7+strict+break36+fibOff          n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52
+C10 start7+md+fibOff+break36             n=  22 pnl=   1595.3 sharpe=  1.01 [  0.91] pf=  2.85 wr=0.50
+C2 start7+strict+break36                 n=  17 pnl=   1580.4 sharpe=  1.04 [  0.95] pf=  3.87 wr=0.53
+C3 start7+strict+fibOff                  n=  20 pnl=   1567.9 sharpe=  1.00 [  0.91] pf=  3.07 wr=0.50
+C7 start7+strict+break36+minswing05      n=  18 pnl=   1473.8 sharpe=  0.98 [  0.88] pf=  3.24 wr=0.50
+C1 start7+strict                         n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50
+C4 start7+strict+minswing05              n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50
+C14 start9+strict                        n=  16 pnl=   1445.1 sharpe=  0.97 [  0.88] pf=  3.62 wr=0.50
+C5 start7+strict+ban1                    n=  14 pnl=   1416.1 sharpe=  0.96 [  0.86] pf=  3.89 wr=0.50
+C15 start7+strict+minswing075            n=  20 pnl=   1388.8 sharpe=  0.86 [  0.77] pf=  2.81 wr=0.50
+C6 start7+strict+lookback8               n=  16 pnl=   1376.4 sharpe=  0.39 [  0.31] pf=  2.68 wr=0.38
+C12 kitchen-sink                         n=  18 pnl=   1357.9 sharpe=  0.38 [  0.29] pf=  2.47 wr=0.39
+C13 start7+strict+rr15                   n=  12 pnl=   1336.2 sharpe=  1.00 [  0.89] pf=  4.03 wr=0.42
+C11 start7+lookback8                     n=  19 pnl=   1225.7 sharpe=  0.63 [  0.54] pf=  2.27 wr=0.37
+C9 start13+strict                        n=   9 pnl=    858.7 sharpe=  0.82 [  0.72] pf=  5.23 wr=0.56
+
+=== sorted by sharpe (n>=20) ===
+C8 start7+strict+break36+fibOff          n=  21 pnl=   1703.1 sharpe=  1.07 [  0.97] pf=  3.25 wr=0.52
+C10 start7+md+fibOff+break36             n=  22 pnl=   1595.3 sharpe=  1.01 [  0.91] pf=  2.85 wr=0.50
+C3 start7+strict+fibOff                  n=  20 pnl=   1567.9 sharpe=  1.00 [  0.91] pf=  3.07 wr=0.50
+C15 start7+strict+minswing075            n=  20 pnl=   1388.8 sharpe=  0.86 [  0.77] pf=  2.81 wr=0.50

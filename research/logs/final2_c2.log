@@ -1,0 +1,39 @@
+validating strat=breakout_d r_over={'cluster_ticks': 10, 'fta_fallback_atr': 3.0, 'min_reward_risk': 1.5} bt_over={}
+--- full (61s) ---
+full:breakout_d                n= 128 pnl=   1201.3 pf=  1.18 wr=0.32 mdd=0.090 sharpe=  0.53 [  0.45] psr=1.00
+ symbol  n         pnl       wr
+EUR_USD  6   21.088879 0.333333
+GBP_USD  5   42.940031 0.400000
+USD_JPY 15  -83.087907 0.266667
+USD_CHF 16  153.465596 0.312500
+AUD_USD 10 -574.391280 0.200000
+USD_CAD 14 -149.737241 0.357143
+NZD_USD  7  253.554019 0.571429
+XAU_USD 22  460.468339 0.318182
+XAG_USD 15  573.907749 0.333333
+WTI_USD  0    0.000000      NaN
+BTC_USD 18  503.082020 0.277778
+
+--- OOS last 25% (120s) ---
+oos:breakout_d                 n=  20 pnl=   -243.5 pf=  0.77 wr=0.30 mdd=0.045 sharpe= -0.50 [ -0.67] psr=0.00
+
+--- walk-forward (122s) ---
+2025-10-02: n=  25 pnl=   2180.9 wr=0.52
+2026-01-02: n=  25 pnl=  -1382.7 wr=0.12
+2026-04-03: n=  23 pnl=    668.2 wr=0.35
+2026-07-03: n=  29 pnl=   -694.2 wr=0.17
+wf-pooled:breakout_d           n=  99 pnl=    798.5 pf=  1.15 wr=0.28 mdd=0.141 sharpe=  0.40 [  0.29] psr=1.00
+
+--- random baseline (122s) ---
+EUR_USD  n_sig=   6 rand_mean=  -123.40 p=0.998 -> PASS
+GBP_USD  n_sig=   6 rand_mean=  -134.69 p=0.989 -> PASS
+USD_JPY  n_sig=  19 rand_mean=  -218.00 p=0.976 -> PASS
+USD_CHF  n_sig=  16 rand_mean=  -366.29 p=1.000 -> PASS
+AUD_USD  n_sig=  12 rand_mean=  -198.32 p=0.974 -> PASS
+USD_CAD  n_sig=  14 rand_mean=  -124.75 p=0.953 -> PASS
+NZD_USD  n_sig=   9 rand_mean=  -134.41 p=0.972 -> PASS
+XAU_USD  n_sig=  27 rand_mean=   -75.94 p=0.723 -> PASS
+XAG_USD  n_sig=  15 rand_mean=  -163.40 p=0.948 -> PASS
+WTI_USD  n_sig=   0 rand_mean=    21.54 p=0.245 -> PASS
+BTC_USD  n_sig=  20 rand_mean=    98.12 p=0.190 -> PASS
+random gate: 11/11 pairs pass (need all)
