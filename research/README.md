@@ -3,11 +3,12 @@
 Ad-hoc (but reproducible) research tooling used to stress-test the retest
 strategy and two structural rewrites on cached H1/D data, across two
 universes: the 11-pair FX/metal/BTC book and six index CFDs, plus (2026-10)
-cross-asset breadth studies — trend/momentum, mean reversion, crypto funding
-carry — over 71 instruments in six asset classes, and a crypto-only lab on
-Binance USDT perps (volume-momentum on daily bars, H1 data staged for next
-phase). Run everything **from the repo root** (data loading uses relative
-cache paths).
+cross-asset breadth studies — trend/momentum and mean reversion — over 71
+instruments in six asset classes. The crypto chapter (funding carry plus the
+perp volume-momentum lab) moved to the sibling **`crypto-lab`** project in
+2026-10; see its `research/` for the ported scripts, corrected-convention
+results and the original logs under `logs/legacy/`. Run everything **from the
+repo root** (data loading uses relative cache paths).
 
 ## Scripts
 
@@ -22,11 +23,10 @@ cache paths).
 | `vecbt.py` | vectorized daily portfolio backtester for breadth studies: signals on closes, applied next bar, equal 1/N weights, per-instrument vol scaling, costs per position change, block-bootstrap random gate |
 | `study_tsmom.py` | **Study A (trend breadth)**: Donchian 50/20 + 12m TSMOM across 71 instruments / 6 classes, 2005-2026, gate + cost sensitivity + SMA200 long-only retail filter |
 | `study_meanrev.py` | **Study B (mean reversion)**: Connors RSI(2) dip-buy on 6 indices + 27 US stocks vs equal-weight buy-and-hold; XAU/XAG ratio z-score spread probe |
-| `study_funding.py` | **Study C (funding carry)**: Binance USDT-perp funding, hedged spot+perp carry, always-on vs threshold policies, fee/threshold sensitivity, split halves |
-| `fetch_binance.py` | pulls full-history fapi klines (D + H1) with volume/quote-volume/trades/taker-buy fields → `{SYM}_PF_{D,H1}.parquet` (perp data for the crypto lab) |
-| `study_crypto.py` | **Study D (crypto grid)**: deep audit + 21 technical variants (trend/volume/taker-flow/MR) on 10 Binance perps, funding charged, kill-test block for qualifiers |
-| `study_crypto2.py` | **Study D2**: detail pass on the gate-passers (yearly, per-symbol, legs) + OBV/VWR parameter neighborhood + full kill tests (gate, cost stress, thirds, LOO, long-only) |
-| `study_crypto3.py` | **Study D3**: horizon scan (20-45d) + last-12m robustness for the volume-momentum finalists |
+
+The crypto studies (`study_funding.py`, `study_crypto*.py`, `fetch_binance.py`)
+moved to the sibling **`crypto-lab`** project (2026-10), together with their
+logs; that project re-runs the same studies under corrected engine conventions.
 
 Variant strategies themselves live in `src/retest/strategies/`
 (`mtf.py`, `breakout.py`, `fade.py`), tested in `tests/test_strategies.py`.
@@ -154,65 +154,23 @@ equal-weight buy-and-hold of the same instruments.
   being long — at best a capital-efficient participation sleeve.
 - XAU/XAG ratio z-score(60) spread probe: dead (Sharpe −0.03, gate p=0.51).
 
-**Study C — crypto funding carry (`study_funding.py`, `logs/funding.log`).**
-Binance USDT-perp funding, 10 symbols, 2020-09→2026-10 (BTC/ETH from 2019).
-Hedged carry (long spot + short equal-notional perp); PnL = funding received
-by the short leg; fees assumed $10-20 per toggle. Policy A holds always;
-policy B holds only while trailing-7d funding > 0.003% per event.
+**Studies C/D — crypto (moved to the sibling project `crypto-lab`, 2026-10).**
+Binance USDT perps, 10 majors, full perp history, full fapi field set (volume,
+quote volume, trades, taker-buy). Two findings survived the program:
+**delta-neutral funding carry** (hedged spot+perp; ~8-10%/yr net of fees,
+Sharpe 6-8 on a $10k/symbol book, positive in both split halves — the only
+persistent positive-expectancy stream found) and **30-day volume-weighted
+momentum** (`obv_30` / `vwr_30` — the only directional family to pass every
+kill test; legacy conventions: long-only Sharpe 0.87-0.97, 10/10 symbols
+positive, gate p=0.005, leave-one-out and cost robust, 7/8 years positive; the
+30-day horizon is the peak of a 20-35 day plateau; the last 12 months
+softened). Everything else failed — plain trend, SMA crosses, taker-flow,
+1-day reversal.
 
-- Policy A: **9.51%/yr, Sharpe 6.1**, maxDD $520 (on a $10k/symbol book),
-  positive every year except 2022 (−4%). Policy B: **10.19%/yr net,
-  Sharpe 7.8**, maxDD $113, worst 30d −$29.
-- Robust: 7.7-10.2%/yr net across thresholds (0-0.01%/event) and fee
-  assumptions; split halves +12.6/15.2%/yr (1st) and +6.5/5.2%/yr (2nd) —
-  positive in both, yield compressing.
-- Per-symbol (A): BTC 11.5, ETH 13.7, LTC 14.7, XRP 14.5, LINK 13.7, ADA
-  13.4, DOGE 12.3 vs SOL 0.2, BNB −0.1, AVAX 6.8 — the weak ones carry deep
-  negative-funding regimes (SOL maxDD −$4.3k per $10k); the threshold policy
-  avoids those.
-- Verdict: the only family in the whole program with persistent positive
-  expectancy. Risks are real but non-statistical: venue/counterparty, margin
-  management on the short perp leg, spot+perp execution, yield compression.
+All crypto code, data tooling, kill tests, and the strategy built from the two
+findings now live in `../crypto-lab` (corrected engine conventions there:
+long-only Sharpe 1.26/1.27; carry policy B 10.15%/yr, Sharpe 7.7; the port
+reproduces the legacy numbers to the digit under legacy flags). The original
+logs from this repo are preserved in that project under `research/logs/legacy/`.
 
-**Study D — crypto-only lab (`fetch_binance.py`, `study_crypto*.py`,
-`logs/crypto_*.log`).** Binance USDT perps, 10 majors, full perp history from
-listing (2019-09→2026-10 for BTC; most alts 2020). Data refetched via
-`fetch_binance.py` with the full fapi field set — volume, quote volume, trade
-count, taker-buy volume — cached as `{SYM}_PF_D/H1.parquet` (the older
-`{SYM}_D/H1` files are Binance *spot* and are no longer used by crypto sims).
-All sims: signals on daily closes applied next bar, equal 1/N, vol-scaled to
-25% standalone per instrument, **funding charged on the position** (longs pay,
-shorts receive), 5 bps one-way (Binance taker) with 10/20 bps stress, 365-day
-annualization.
 
-- *Audit*: vols 57% (BTC) → 201% (DOGE); mean cross-corr 0.56, corr-to-BTC
-  0.63; daily return autocorr ≈ 0 at all lags; volume is where the structure
-  lives — |ret| vs log-volume corr +0.41, log-volume autocorr +0.76,
-  taker-buy imbalance autocorr +0.31 and corr(imbalance, ret) +0.38; funding
-  averages +9.5%/yr (77% of days positive).
-- *Grid (21 variants)*: plain trend mediocre (Donchian 55/20 Sharpe 0.27,
-  mom_30 0.63, mom_90 −0.08, SMA crosses negative); taker-flow dead
-  (taker_mom −0.18, taker_fade −0.73); 1-day reversal dead (−0.25). **The
-  volume×momentum family dominates**: `obv_30` (30-day OBV trend) Sharpe 0.87,
-  PF 1.42, 2045 trades, MDD −19%, 10/10 symbols positive; `vwr_30`
-  (volume-weighted return momentum) 0.91, PF 1.50; mom_30 gated on
-  high-volume days 0.73; volume-confirmed Donchian 0.36 vs 0.27 plain. Volume
-  *presence* confirms monthly momentum; the taker buy/sell split adds nothing.
-  B&H all-long: 0.55 (funding drag −0.68 return units over the sample).
-- *Kill tests (obv_30 / vwr_30)*: random gate p=0.005 both (actual +1.28/+1.43
-  vs null medians −0.39/−0.40); leave-one-out min +0.73/+0.82 (even dropping
-  any single symbol); cost stress 10/20 bps → 0.80/0.66 and 0.86/0.75; 7/8
-  years positive; sample thirds decay +1.54/+0.71/+0.51 (obv_30). Long-only is
-  strongest: obv_30_lo Sharpe 0.98 PF 1.82 (802 trades), vwr_30_lo 0.97 PF
-  1.90. Horizon scan: broad plateau 20-35 days (long-only 0.79-0.98), peak at
-  30 — neighborhood positive, not knife-edge.
-- *Honest caveats*: 30-day peak and recent-12m softening (long-only flat over
-  the last year, long/short still positive) — this is the best candidate the
-  program has produced, but it is a forward-validation candidate, not a
-  proven edge. Execution is daily close → next-day market orders; realistic on
-  Binance perps at the majors' liquidity.
-
-Verdict: **30-day volume-weighted momentum is the strongest surviving
-candidate of the crypto lab** and pairs naturally with the funding carry
-(long the trend when it's on, harvest funding when flat). H1 perp data
-(53-62k bars/symbol) is staged for the intraday refinement phase.

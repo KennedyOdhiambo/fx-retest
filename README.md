@@ -15,7 +15,7 @@ fade, plus MTF-level retests) confirmed the finding. Deeper history (24y
 daily) and a follow-up breadth program — trend/momentum, mean reversion,
 funding carry across 71 instruments in six asset classes — found no tradable
 directional edge either; the only surviving candidate is **delta-neutral
-crypto funding carry** (details in `research/README.md`). See
+crypto funding carry** (now built out in the sibling `crypto-lab` project). See
 [Findings](#findings) and [Way forward](#way-forward).
 
 ## Pipeline
@@ -150,10 +150,14 @@ far worth building around.
 
 2026-10 crypto lab (10 Binance perps, full perp history, volume + taker-flow
 data, funding charged on positions): plain trend and taker-flow signals are
-dead, but **30-day volume-weighted momentum** (OBV trend / volume-weighted
-return momentum) passed every kill test — Sharpe 0.87-0.97, 10/10 symbols
-positive, gate p=0.005, leave-one-out robust, cost-stressed, positive in 7/8
-years — with two honest caveats (30-day horizon is the peak of a broad
-plateau; recent 12 months softened). A forward-validation candidate that
-pairs with the funding carry: participate long when the volume trend is on,
-harvest funding when flat. Full numbers: `research/README.md` (Study D).
+dead, but **30-day volume-weighted momentum** passed every kill test (legacy
+conventions: Sharpe 0.87-0.97, 10/10 symbols, gate p=0.005, leave-one-out
+robust, cost-stressed, 7/8 years positive; corrected conventions 1.26-1.27
+long-only) — with two honest caveats (30-day horizon is the peak of a broad
+plateau; recent 12 months softened).
+
+The crypto chapter — data tooling, studies, kill tests and the strategy built
+from them (long the volume trend when it's on, harvest funding when flat) —
+now lives in the sibling **`crypto-lab`** project (2026-10). Full numbers and
+evidence: `../crypto-lab/README.md`; the original logs from this repo are
+preserved there under `research/logs/legacy/`.
