@@ -102,12 +102,20 @@ def meanrev_long(close: pd.Series, rsi_entry: float = 5.0, exit_ma: int = 5,
 
 def simulate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray],
              cost_bps: float = 3.0, vol_target: float = 0.10, vol_win: int = 20,
-             kmin: float = 0.2, kmax: float = 3.0) -> dict:
-    """Equal 1/N weights x per-instrument vol scaling; costs on position changes."""
+             kmin: float = 0.2, kmax: float = 3.0,
+             funding: dict[str, pd.Series] | None = None) -> dict:
+    """Equal 1/N weights x per-instrument vol scaling; costs on position changes.
+
+    funding: optional per-instrument daily funding rate (sum of the day's
+    events). Perp positions pay it when long / receive it when short:
+    contribution -= pos.shift(1) * funding / N.
+    """
     union = pd.DatetimeIndex(sorted(set().union(*[set(df.index) for df in frames.values()])))
     port = pd.Series(0.0, index=union)
     costs = pd.Series(0.0, index=union)
     episodes: list[tuple[str, int, float]] = []
+    costs_by_name: dict[str, float] = {}
+    funding_by_name: dict[str, float] = {}
     n_inst = len(frames)
     for name, df in frames.items():
         c = df["close"]
@@ -116,16 +124,23 @@ def simulate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray],
         k = (vol_target / vol).clip(kmin, kmax).fillna(0.0)
         pos = pd.Series(positions[name], index=df.index, dtype=float)
         eff = (k * pos).shift(1).fillna(0.0) / n_inst
-        pnl = (eff * ret).reindex(union).fillna(0.0)
+        contrib = eff * ret
+        if funding is not None and name in funding:
+            f = funding[name].reindex(df.index).fillna(0.0)
+            fund = -(pos.shift(1).fillna(0.0) * f) / n_inst
+            contrib = contrib + fund
+            funding_by_name[name] = float(fund.sum())
+        pnl = contrib.reindex(union).fillna(0.0)
         port += pnl
         dpos = pos.diff().abs().fillna(pos.abs())
         cost = ((dpos * k).shift(1).fillna(0.0) * (cost_bps / 1e4) / n_inst).reindex(union).fillna(0.0)
         costs += cost
+        costs_by_name[name] = float(cost.sum())
         # episodes for trade-level stats (a sign flip closes one trade and opens the next).
         # day t's pnl uses pos[t-1] (eff is shifted), so a trade entered at t=r earns
         # from t=r+1 through t=exit(inclusive).
         p = pos.to_numpy()
-        e = (eff * ret).to_numpy()
+        e = contrib.to_numpy()
         run_start = None
         prev = 0.0
         for t in range(len(p)):
@@ -141,19 +156,25 @@ def simulate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray],
     net = port - costs
     equity = (1.0 + net).cumprod() * START_EQUITY
     return {"net": net, "gross": port, "costs": costs, "equity": equity, "episodes": episodes,
-            "gross_pnl": float(port.sum()), "cost_total": float(costs.sum()), "n_inst": n_inst}
+            "gross_pnl": float(port.sum()), "cost_total": float(costs.sum()), "n_inst": n_inst,
+            "costs_by_name": costs_by_name, "funding_by_name": funding_by_name}
 
 
 def random_gate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray],
                 cost_bps: float = 3.0, n_draws: int = 200, block: int = 20,
                 vol_target: float = 0.10, vol_win: int = 20, kmin: float = 0.2,
-                kmax: float = 3.0, seed: int = 7) -> dict:
-    """Block-shuffle each instrument's returns against the same positions."""
+                kmax: float = 3.0, seed: int = 7,
+                funding: dict[str, pd.Series] | None = None) -> dict:
+    """Block-shuffle each instrument's returns against the same positions.
+
+    The funding term depends only on positions, so it is a constant added to
+    both the actual and the null distribution."""
     rng = np.random.default_rng(seed)
     n_inst = len(frames)
     null = np.zeros(n_draws)
     actual = 0.0
     cost_total = 0.0
+    funding_total = 0.0
     for name, df in frames.items():
         c = df["close"]
         ret = c.pct_change().fillna(0.0).to_numpy()
@@ -163,6 +184,9 @@ def random_gate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray
         eff = ((k * pos).shift(1).fillna(0.0) / n_inst).to_numpy()
         dpos = pos.diff().abs().fillna(pos.abs())
         cost_total += float(((dpos * k).shift(1).fillna(0.0) * (cost_bps / 1e4) / n_inst).sum())
+        if funding is not None and name in funding:
+            f = funding[name].reindex(df.index).fillna(0.0)
+            funding_total += float((-(pos.shift(1).fillna(0.0) * f) / n_inst).sum())
         n = len(ret)
         nb = n // block
         usable = nb * block
@@ -173,11 +197,11 @@ def random_gate(frames: dict[str, pd.DataFrame], positions: dict[str, np.ndarray
         order = np.argsort(rng.random((n_draws, nb)), axis=1)
         r_sh = r_use[idx[order]].reshape(n_draws, usable)
         null += r_sh @ eff_use
-    actual_net = actual - cost_total
-    null_net = null - cost_total
+    actual_net = actual + funding_total - cost_total
+    null_net = null + funding_total - cost_total
     p = (float(np.sum(null_net >= actual_net)) + 1.0) / (n_draws + 1.0)
     return {"actual_net": actual_net, "null_median": float(np.median(null_net)),
-            "p_value": p, "cost_total": cost_total}
+            "p_value": p, "cost_total": cost_total, "funding_total": funding_total}
 
 
 # ---------------------------------------------------------------- reporting

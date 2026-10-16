@@ -1,0 +1,51 @@
+=== detail: OBV trend ===
+obv_30                     eq=   3.07x cagr= 17.1% vol=20.5% sharpe= 0.87 mdd=-18.9% trades= 2045 pf= 1.42 wr=0.35 yrs+= 6/8 q+=20/30
+  obv_30             2019:-1%  2020:+18%  2021:+58%  2022:-3%  2023:+23%  2024:+22%  2025:+2%  2026:+12%
+  legs: long +1.24 short +0.13 | funding -0.47
+  per-sym sharpe (own history): BTC:+0.71  ETH:+0.56  SOL:+0.29  BNB:+0.53  XRP:+0.19  ADA:+0.73  DOG:+0.83  AVA:+0.79  LIN:+0.29  LTC:+0.00
+  net-positive symbols (pooled window): 10/10
+
+=== detail: mom30_highvol ===
+mom30_highvol              eq=   1.76x cagr=  8.3% vol=11.8% sharpe= 0.73 mdd=-14.9% trades= 3156 pf= 1.29 wr=0.48 yrs+= 6/8 q+=19/30
+  mom30_highvol      2019:-0%  2020:+13%  2021:+9%  2022:+7%  2023:+7%  2024:+8%  2025:-4%  2026:+20%
+  legs: long +0.70 short +0.07 | funding -0.20
+  per-sym sharpe (own history): BTC:+1.12  ETH:+0.53  SOL:+0.50  BNB:+0.59  XRP:+0.19  ADA:+0.93  DOG:+0.40  AVA:+0.54  LIN:-0.34  LTC:-0.26
+  net-positive symbols (pooled window): 8/10
+
+=== OBV parameter neighborhood (pooled, 5bps) ===
+  obv_10  sharpe +0.29 pf 1.12 trades  3723 halves +0.26/+0.33
+  obv_15  sharpe +0.53 pf 1.21 trades  2857 halves +0.47/+0.59
+  obv_20  sharpe +0.33 pf 1.14 trades  2541 halves +0.01/+0.61
+  obv_30  sharpe +0.87 pf 1.42 trades  2045 halves +0.97/+0.78
+  obv_45  sharpe +0.43 pf 1.23 trades  1585 halves +0.50/+0.36
+  obv_60  sharpe +0.59 pf 1.35 trades  1321 halves +0.40/+0.77
+  obv_vs_sma30 sharpe +0.32 pf 1.14 trades  2697 halves +0.12/+0.50
+  vwr_10  sharpe +0.40 pf 1.17 trades  3366 halves +0.64/+0.18
+  vwr_20  sharpe +0.51 pf 1.23 trades  2148 halves +0.39/+0.62
+  vwr_30  sharpe +0.91 pf 1.50 trades  1599 halves +1.01/+0.83
+
+=== finalists kill tests (365-annualized) ===
+
+obv_30:
+  cost10 sharpe +0.80 pf 1.42 trades  2045 halves +0.92/+0.70
+  cost20 sharpe +0.66 pf 1.42 trades  2045 halves +0.81/+0.53
+  gate p=0.005 actual=+1.28 null=-0.39
+  thirds: +1.54  +0.71  +0.51
+  leave-one-out: min +0.73 max +0.95
+  long-only: sharpe +0.98 pf 1.82 trades  1024 halves +1.14/+0.82
+
+vwr_30:
+  cost10 sharpe +0.86 pf 1.50 trades  1599 halves +0.96/+0.77
+  cost20 sharpe +0.75 pf 1.50 trades  1599 halves +0.87/+0.64
+  gate p=0.005 actual=+1.43 null=-0.40
+  thirds: +1.63  +0.73  +0.52
+  leave-one-out: min +0.82 max +1.06
+  long-only: sharpe +0.97 pf 1.90 trades   802 halves +1.11/+0.83
+
+mom30_highvol:
+  cost10 sharpe +0.55 pf 1.29 trades  3156 halves +0.60/+0.52
+  cost20 sharpe +0.18 pf 1.29 trades  3156 halves +0.29/+0.09
+  gate p=0.005 actual=+0.62 null=-0.34
+  thirds: +1.04  +0.69  +0.62
+  leave-one-out: min +0.59 max +0.86
+  long-only: sharpe +1.06 pf 1.54 trades  1670 halves +1.58/+0.63

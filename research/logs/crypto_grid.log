@@ -1,0 +1,80 @@
+=== AUDIT | pooled window 2020-09-23 -> 2026-10-16 (2214 days) ===
+ann vol: BTC:57%  ETH:77%  SOL:113%  BNB:80%  XRP:105%  ADA:98%  DOG:201%  AVA:114%  LIN:99%  LTC:85%
+mean cross-corr 0.56 | mean corr to BTC 0.63
+return autocorr (pooled): l1:-0.025  l2:+0.008  l3:+0.016  l5:-0.021
+|ret| autocorr l1 +0.22 (vol clustering)
+weekday mean %/d: Mon:+0.109  Tue:-0.026  Wed:+0.394  Thu:+0.094  Fri:+0.403  Sat:+0.428  Sun:+0.160
+volume: |ret| vs log-vol corr (pooled z) +0.41 | log-vol autocorr l1 +0.76
+taker imbalance mean: BTC:-0.005  ETH:-0.009  SOL:-0.021  BNB:-0.021  XRP:-0.026  ADA:-0.023  DOG:-0.027  AVA:-0.024  LIN:-0.023  LTC:-0.026
+taker: mean std 0.029 | corr(imb, ret) pooled +0.38 | autocorr l1 +0.31
+funding: mean 9.5%/yr | % positive days 77% | BTC 11.0%/yr
+
+=== GRID | 21 variants | cost 5bps | vol_t 0.25 | funding charged ===
+variant          sharpe    pf trades     mdd    h1    h2 pos/10   fund$  cost$
+dc_55_20                   eq=   1.24x cagr=  3.0% vol=16.9% sharpe= 0.26 mdd=-36.6% trades=  271 pf= 1.26 wr=0.41 yrs+= 3/8 q+=13/30
+dc_55_20           0.26  1.26    271  -36.6%  0.43  0.10     7/10   -0.55   0.01
+dc_100_50                  eq=   1.05x cagr=  0.7% vol=18.2% sharpe= 0.13 mdd=-37.8% trades=  133 pf= 1.18 wr=0.40 yrs+= 3/8 q+=10/30
+dc_100_50          0.13  1.18    133  -37.8%  0.26  0.01     5/10   -0.58   0.01
+sma_20_100                 eq=   0.79x cagr= -3.3% vol=22.3% sharpe=-0.04 mdd=-53.7% trades=  297 pf= 0.98 wr=0.37 yrs+= 3/8 q+=13/30
+sma_20_100        -0.04  0.98    297  -53.7% -0.22  0.12     5/10   -0.50   0.01
+sma_50_200                 eq=   0.65x cagr= -6.0% vol=22.0% sharpe=-0.17 mdd=-59.8% trades=  145 pf= 0.80 wr=0.32 yrs+= 3/8 q+= 7/30
+sma_50_200        -0.17  0.80    145  -59.8%  0.20 -0.49     2/10   -0.42   0.01
+mom_7                      eq=   1.53x cagr=  6.2% vol=23.0% sharpe= 0.38 mdd=-24.3% trades= 4377 pf= 1.15 wr=0.35 yrs+= 6/8 q+=14/30
+mom_7              0.38  1.15   4377  -24.3%  0.53  0.23     8/10   -0.43   0.20
+mom_30                     eq=   2.30x cagr= 12.4% vol=22.4% sharpe= 0.63 mdd=-27.4% trades= 1992 pf= 1.33 wr=0.35 yrs+= 6/8 q+=17/30
+mom_30             0.63  1.33   1992  -27.4%  0.92  0.39     7/10   -0.52   0.10
+mom_90                     eq=   0.73x cagr= -4.4% vol=22.6% sharpe=-0.08 mdd=-56.1% trades=  992 pf= 0.97 wr=0.31 yrs+= 3/8 q+=13/30
+mom_90            -0.08  0.97    992  -56.1% -0.17 -0.01     5/10   -0.54   0.05
+bb_break_20                eq=   1.31x cagr=  3.8% vol=17.8% sharpe= 0.30 mdd=-22.5% trades=  819 pf= 1.19 wr=0.37 yrs+= 4/8 q+=16/30
+bb_break_20        0.30  1.19    819  -22.5%  0.29  0.31     7/10   -0.45   0.04
+dc_volconfirm              eq=   1.37x cagr=  4.5% vol=15.8% sharpe= 0.36 mdd=-33.8% trades=  229 pf= 1.42 wr=0.43 yrs+= 4/8 q+=13/30
+dc_volconfirm      0.36  1.42    229  -33.8%  0.48  0.24     8/10   -0.53   0.01
+dc_drybreak                eq=   1.04x cagr=  0.5% vol= 4.1% sharpe= 0.15 mdd= -9.9% trades=   38 pf= 1.26 wr=0.42 yrs+= 2/8 q+=10/30
+dc_drybreak        0.15  1.26     38   -9.9%  0.09  0.21     5/10   -0.06   0.00
+mom30_highvol              eq=   1.76x cagr=  8.3% vol=11.8% sharpe= 0.73 mdd=-14.9% trades= 3156 pf= 1.29 wr=0.48 yrs+= 6/8 q+=19/30
+mom30_highvol      0.73  1.29   3156  -14.9%  0.75  0.73     8/10   -0.20   0.16
+mom30_lowvol               eq=   0.96x cagr= -0.5% vol=10.9% sharpe= 0.00 mdd=-24.9% trades= 3987 pf= 1.06 wr=0.49 yrs+= 3/8 q+=11/30
+mom30_lowvol       0.00  1.06   3987  -24.9%  0.22 -0.20     5/10   -0.15   0.19
+vwap_mom_10                eq=   1.63x cagr=  7.1% vol=23.0% sharpe= 0.41 mdd=-27.9% trades= 4352 pf= 1.16 wr=0.29 yrs+= 6/8 q+=17/30
+vwap_mom_10        0.41  1.16   4352  -27.9%  0.61  0.23     9/10   -0.44   0.20
+obv_30                     eq=   3.07x cagr= 17.1% vol=20.5% sharpe= 0.87 mdd=-18.9% trades= 2045 pf= 1.42 wr=0.35 yrs+= 6/8 q+=20/30
+obv_30             0.87  1.42   2045  -18.9%  0.97  0.78    10/10   -0.47   0.10
+taker_mom_5                eq=   0.60x cagr= -7.0% vol=24.3% sharpe=-0.18 mdd=-56.3% trades= 1657 pf= 0.94 wr=0.39 yrs+= 1/8 q+=18/30
+taker_mom_5       -0.18  0.94   1657  -56.3% -0.12 -0.23     3/10    0.67   0.09
+taker_fade_2z              eq=   0.78x cagr= -3.5% vol= 4.7% sharpe=-0.73 mdd=-30.8% trades=  890 pf= 0.83 wr=0.47 yrs+= 1/8 q+= 9/30
+taker_fade_2z     -0.73  0.83    890  -30.8% -1.52 -0.16     3/10   -0.03   0.04
+rsi2_10                    eq=   1.10x cagr=  1.3% vol=15.4% sharpe= 0.16 mdd=-25.5% trades= 1133 pf= 1.13 wr=0.67 yrs+= 6/8 q+=17/30
+rsi2_10            0.16  1.13   1133  -25.5%  0.33 -0.01     5/10   -0.01   0.05
+drop_z2_hold3              eq=   1.05x cagr=  0.7% vol= 6.3% sharpe= 0.15 mdd=-11.2% trades=  488 pf= 1.16 wr=0.58 yrs+= 4/8 q+=20/30
+drop_z2_hold3      0.15  1.16    488  -11.2%  0.30 -0.00     7/10   -0.01   0.02
+bb_revert_20               eq=   1.17x cagr=  2.2% vol=13.8% sharpe= 0.23 mdd=-24.1% trades=  374 pf= 1.26 wr=0.63 yrs+= 5/8 q+=19/30
+bb_revert_20       0.23  1.26    374  -24.1%  0.35  0.11     7/10    0.02   0.02
+volspike_revert            eq=   1.21x cagr=  2.7% vol= 7.0% sharpe= 0.41 mdd=-14.6% trades=  523 pf= 1.39 wr=0.59 yrs+= 6/8 q+=21/30
+volspike_revert    0.41  1.39    523  -14.6%  0.10  0.72     7/10    0.01   0.02
+revert_1d                  eq=   0.55x cagr= -8.1% vol=23.0% sharpe=-0.25 mdd=-72.9% trades=12709 pf= 1.02 wr=0.66 yrs+= 3/8 q+=14/30
+revert_1d         -0.25  1.02  12709  -72.9%  0.57 -1.03     3/10    0.26   0.58
+
+=== KILL TESTS (rule: sharpe>=0.60, pos>=7/10, both halves>0) ===
+
+mom_30: sharpe 0.63, 7/10 symbols, halves 0.92/0.39
+  mom_30 cost10            eq=   2.07x cagr= 10.8% vol=22.4% sharpe= 0.57 mdd=-30.0% trades= 1992 pf= 1.33 wr=0.35 yrs+= 6/8 q+=16/30
+  mom_30 cost20            eq=   1.68x cagr=  7.6% vol=22.4% sharpe= 0.44 mdd=-34.9% trades= 1992 pf= 1.33 wr=0.35 yrs+= 4/8 q+=16/30
+  gate: p=0.005 actual=+1.06 null_med=-0.64
+  leave-one-out sharpe: min +0.51 max +0.79
+
+mom30_highvol: sharpe 0.73, 8/10 symbols, halves 0.75/0.73
+  mom30_highvol cost10     eq=   1.51x cagr=  5.9% vol=11.8% sharpe= 0.55 mdd=-16.1% trades= 3156 pf= 1.29 wr=0.48 yrs+= 6/8 q+=18/30
+  mom30_highvol cost20     eq=   1.10x cagr=  1.4% vol=11.8% sharpe= 0.18 mdd=-26.9% trades= 3156 pf= 1.29 wr=0.48 yrs+= 5/8 q+=12/30
+  gate: p=0.005 actual=+0.62 null_med=-0.34
+  leave-one-out sharpe: min +0.59 max +0.86
+
+obv_30: sharpe 0.87, 10/10 symbols, halves 0.97/0.78
+  obv_30 cost10            eq=   2.77x cagr= 15.4% vol=20.5% sharpe= 0.80 mdd=-20.6% trades= 2045 pf= 1.42 wr=0.35 yrs+= 6/8 q+=20/30
+  obv_30 cost20            eq=   2.26x cagr= 12.2% vol=20.5% sharpe= 0.66 mdd=-24.0% trades= 2045 pf= 1.42 wr=0.35 yrs+= 5/8 q+=19/30
+  gate: p=0.005 actual=+1.28 null_med=-0.39
+  leave-one-out sharpe: min +0.73 max +0.95
+
+=== benchmarks ===
+buyhold_all_long           eq=   2.28x cagr= 12.3% vol=28.5% sharpe= 0.55 mdd=-44.5% trades=   10 pf=  inf wr=1.00 yrs+= 4/8 q+=14/30
+  funding drag on B&H: -0.68 (portfolio return units)
+buyhold_all_short          eq=   0.25x cagr=-17.9% vol=28.5% sharpe=-0.55 mdd=-82.0% trades=   10 pf= 0.00 wr=0.00 yrs+= 2/8 q+=15/30

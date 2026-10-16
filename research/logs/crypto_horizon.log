@@ -1,0 +1,23 @@
+=== vwr horizon scan (long/short) ===
+vwr_20         sharpe +0.51  pf 1.23  trades  2148  halves +0.39/+0.62  last12m +0.68
+vwr_25         sharpe +0.72  pf 1.36  trades  1924  halves +0.50/+0.92  last12m +0.96
+vwr_30         sharpe +0.91  pf 1.50  trades  1599  halves +1.01/+0.83  last12m +0.65
+vwr_35         sharpe +0.66  pf 1.40  trades  1408  halves +0.84/+0.50  last12m +0.54
+vwr_40         sharpe +0.36  pf 1.21  trades  1363  halves +0.40/+0.32  last12m +0.89
+vwr_45         sharpe +0.23  pf 1.14  trades  1210  halves +0.24/+0.21  last12m +1.11
+
+=== vwr horizon scan (long-only) ===
+vwr_20_lo      sharpe +0.79  pf 1.56  trades  1072  halves +0.86/+0.73  last12m +0.10
+vwr_25_lo      sharpe +0.89  pf 1.74  trades   961  halves +0.89/+0.89  last12m +0.27
+vwr_30_lo      sharpe +0.97  pf 1.90  trades   802  halves +1.11/+0.83  last12m +0.06
+vwr_35_lo      sharpe +0.83  pf 1.81  trades   706  halves +1.04/+0.62  last12m +0.00
+vwr_40_lo      sharpe +0.64  pf 1.61  trades   683  halves +0.80/+0.50  last12m +0.23
+vwr_45_lo      sharpe +0.58  pf 1.57  trades   608  halves +0.73/+0.44  last12m +0.39
+
+=== obv horizon scan (long-only) ===
+obv_20_lo      sharpe +0.68  pf 1.44  trades  1268  halves +0.65/+0.71  last12m -0.09
+obv_25_lo      sharpe +0.79  pf 1.56  trades  1132  halves +0.73/+0.84  last12m +0.33
+obv_30_lo      sharpe +0.98  pf 1.82  trades  1024  halves +1.14/+0.82  last12m +0.43
+obv_35_lo      sharpe +0.87  pf 1.75  trades   878  halves +0.91/+0.82  last12m +0.80
+obv_40_lo      sharpe +0.80  pf 1.75  trades   824  halves +0.86/+0.73  last12m +0.53
+obv_45_lo      sharpe +0.72  pf 1.67  trades   794  halves +0.87/+0.57  last12m +0.46

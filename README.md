@@ -147,3 +147,13 @@ carry** — hedged spot+perp harvester, ~8-10%/yr net of fees, Sharpe 6-8,
 positive in both split halves — a yield harvest rather than a price strategy,
 with real venue, margin and execution risks. It is the only thing found so
 far worth building around.
+
+2026-10 crypto lab (10 Binance perps, full perp history, volume + taker-flow
+data, funding charged on positions): plain trend and taker-flow signals are
+dead, but **30-day volume-weighted momentum** (OBV trend / volume-weighted
+return momentum) passed every kill test — Sharpe 0.87-0.97, 10/10 symbols
+positive, gate p=0.005, leave-one-out robust, cost-stressed, positive in 7/8
+years — with two honest caveats (30-day horizon is the peak of a broad
+plateau; recent 12 months softened). A forward-validation candidate that
+pairs with the funding carry: participate long when the volume trend is on,
+harvest funding when flat. Full numbers: `research/README.md` (Study D).
