@@ -1,0 +1,285 @@
+universe: 17 symbols | EUR_USD.. | window 2002-05-01 -> data end
+
+=== breakout_daily | base (10s) ===
+pooled:all                   n=1016 pnl=    -6037 pf= 0.90 wr=0.37 mdd=0.789 sharpe= -0.07 [ -0.09]
+pooled:indices               n= 595 pnl=    -7216 pf= 0.80 wr=0.34 mdd=0.886 sharpe= -0.15 [ -0.17]
+pooled:fx+metals             n= 455 pnl=     1768 pf= 1.06 wr=0.41 mdd=0.218 sharpe=  0.13 [  0.11]
+    symbol   n     pnl   wr
+   EUR_USD  44   252.0 0.41
+   GBP_USD  42  1042.0 0.45
+   USD_JPY  51 -1551.0 0.29
+   USD_CHF  42   695.0 0.45
+   AUD_USD  37   391.0 0.41
+   USD_CAD  40 -1612.0 0.25
+   NZD_USD  35  -434.0 0.37
+   XAU_USD  79  2439.0 0.51
+   XAG_USD  51   543.0 0.49
+   WTI_USD  43   646.0 0.44
+   BTC_USD  48   195.0 0.40
+SPX500_USD 118 -2473.0 0.31
+NAS100_USD 127  2008.0 0.43
+  US30_USD 114  -999.0 0.36
+  DE30_EUR 107 -1979.0 0.33
+ UK100_GBP  62 -1490.0 0.32
+ JP225_USD  71 -2261.0 0.27
+       n     pnl    wr
+year                  
+2002  17  -266.0  0.35
+2003  64 -1024.0  0.34
+2004  44  1065.0  0.43
+2005  70 -1098.0  0.31
+2006  70 -1607.0  0.31
+2007  67  -155.0  0.37
+2008  53 -1384.0  0.30
+2009  37  -159.0  0.41
+2010  24  -658.0  0.29
+2011  32   218.0  0.44
+2012  19   354.0  0.53
+2013  44    89.0  0.39
+2014  36  -241.0  0.33
+2015  35 -1588.0  0.23
+2016  26  -508.0  0.35
+2017  50   557.0  0.44
+2018  29  -457.0  0.31
+2019  24    19.0  0.38
+2020  33   347.0  0.39
+2021  49  -447.0  0.37
+2022  20   151.0  0.40
+2023  21  -875.0  0.24
+2024  51   641.0  0.43
+2025  54   782.0  0.46
+2026  47   208.0  0.36
+positive years: 11/25
+positive quarters: 44/99 (44%), worst=-1140, best=1139, median=-60
+worst 5 quarters: 2007Q1:-1140, 2008Q4:-990, 2006Q3:-983, 2002Q3:-931, 2015Q2:-883
+EUR_USD     n_sig=  66 rand_mean=        2 p=0.498 -> PASS
+GBP_USD     n_sig=  78 rand_mean=      154 p=0.261 -> PASS
+USD_JPY     n_sig=  69 rand_mean=     -142 p=0.760 -> PASS
+USD_CHF     n_sig=  67 rand_mean=      101 p=0.330 -> PASS
+AUD_USD     n_sig=  54 rand_mean=     -196 p=0.825 -> PASS
+USD_CAD     n_sig=  64 rand_mean=     -178 p=0.716 -> PASS
+NZD_USD     n_sig=  53 rand_mean=     -366 p=0.955 -> PASS
+XAU_USD     n_sig= 111 rand_mean=      -56 p=0.562 -> PASS
+XAG_USD     n_sig=  84 rand_mean=     -445 p=0.967 -> PASS
+WTI_USD     n_sig=  67 rand_mean=      118 p=0.303 -> PASS
+BTC_USD     n_sig=  81 rand_mean=       43 p=0.420 -> PASS
+SPX500_USD  n_sig= 185 rand_mean=    -1353 p=0.999 -> PASS
+NAS100_USD  n_sig= 193 rand_mean=     -734 p=0.957 -> PASS
+US30_USD    n_sig= 175 rand_mean=     -619 p=0.969 -> PASS
+DE30_EUR    n_sig= 172 rand_mean=     -528 p=0.876 -> PASS
+UK100_GBP   n_sig=  94 rand_mean=     -241 p=0.807 -> PASS
+JP225_USD   n_sig=  94 rand_mean=      239 p=0.185 -> PASS
+random gate: 17/17 pairs pass (need all)
+
+=== breakout_daily | c1 fx-knobs (28s) ===
+pooled:all                   n= 991 pnl=     -534 pf= 0.99 wr=0.34 mdd=0.608 sharpe=  0.05 [  0.02]
+pooled:indices               n= 580 pnl=    -4934 pf= 0.87 wr=0.31 mdd=0.688 sharpe= -0.09 [ -0.11]
+pooled:fx+metals             n= 459 pnl=     5538 pf= 1.19 wr=0.40 mdd=0.184 sharpe=  0.29 [  0.27]
+    symbol   n     pnl   wr
+   EUR_USD  48   116.0 0.38
+   GBP_USD  42  1123.0 0.43
+   USD_JPY  58 -1541.0 0.31
+   USD_CHF  40  1125.0 0.45
+   AUD_USD  41   326.0 0.37
+   USD_CAD  39  -870.0 0.31
+   NZD_USD  37   -17.0 0.38
+   XAU_USD  79  4215.0 0.49
+   XAG_USD  52  1388.0 0.50
+   WTI_USD  42  1368.0 0.43
+   BTC_USD  53  1242.0 0.45
+SPX500_USD 112  -748.0 0.29
+NAS100_USD 123  2454.0 0.37
+  US30_USD 107  -622.0 0.33
+  DE30_EUR 104 -1882.0 0.29
+ UK100_GBP  61 -1730.0 0.26
+ JP225_USD  81 -2679.0 0.25
+       n     pnl    wr
+year                  
+2002  18  -301.0  0.28
+2003  62 -1076.0  0.27
+2004  47  1621.0  0.43
+2005  68  -339.0  0.29
+2006  65 -1371.0  0.28
+2007  67    91.0  0.31
+2008  51  -854.0  0.31
+2009  38  -107.0  0.39
+2010  24 -1006.0  0.25
+2011  31   322.0  0.39
+2012  20   403.0  0.50
+2013  40  -146.0  0.30
+2014  32 -1072.0  0.22
+2015  35 -1459.0  0.23
+2016  26   223.0  0.42
+2017  47  1517.0  0.43
+2018  27  -625.0  0.26
+2019  24   465.0  0.38
+2020  34  1278.0  0.44
+2021  47  -702.0  0.32
+2022  21   145.0  0.38
+2023  22  -907.0  0.23
+2024  49  1529.0  0.45
+2025  50  1670.0  0.44
+2026  46   166.0  0.30
+positive years: 12/25
+positive quarters: 46/99 (46%), worst=-1115, best=1311, median=-37
+worst 5 quarters: 2008Q4:-1115, 2003Q3:-1106, 2007Q1:-1088, 2002Q3:-1020, 2015Q2:-865
+EUR_USD     n_sig=  68 rand_mean=       17 p=0.474 -> PASS
+GBP_USD     n_sig=  77 rand_mean=       27 p=0.458 -> PASS
+USD_JPY     n_sig=  81 rand_mean=     -309 p=0.853 -> PASS
+USD_CHF     n_sig=  63 rand_mean=      -53 p=0.585 -> PASS
+AUD_USD     n_sig=  54 rand_mean=     -196 p=0.825 -> PASS
+USD_CAD     n_sig=  61 rand_mean=     -379 p=0.952 -> PASS
+NZD_USD     n_sig=  50 rand_mean=      -73 p=0.646 -> PASS
+XAU_USD     n_sig= 115 rand_mean=      558 p=0.127 -> PASS
+XAG_USD     n_sig=  89 rand_mean=     -351 p=0.915 -> PASS
+WTI_USD     n_sig=  69 rand_mean=        7 p=0.491 -> PASS
+BTC_USD     n_sig=  89 rand_mean=       34 p=0.449 -> PASS
+SPX500_USD  n_sig= 186 rand_mean=    -2080 p=1.000 -> PASS
+NAS100_USD  n_sig= 201 rand_mean=     -508 p=0.900 -> PASS
+US30_USD    n_sig= 187 rand_mean=     -131 p=0.631 -> PASS
+DE30_EUR    n_sig= 180 rand_mean=      295 p=0.297 -> PASS
+UK100_GBP   n_sig= 103 rand_mean=     -566 p=0.981 -> PASS
+JP225_USD   n_sig= 114 rand_mean=     -108 p=0.652 -> PASS
+random gate: 17/17 pairs pass (need all)
+
+=== breakout_daily | hold30 (48s) ===
+pooled:all                   n=1046 pnl=    -4908 pf= 0.92 wr=0.38 mdd=0.739 sharpe= -0.08 [ -0.10]
+pooled:indices               n= 596 pnl=    -7410 pf= 0.80 wr=0.34 mdd=0.908 sharpe= -0.13 [ -0.15]
+pooled:fx+metals             n= 483 pnl=     3416 pf= 1.12 wr=0.43 mdd=0.201 sharpe=  0.22 [  0.20]
+    symbol   n     pnl   wr
+   EUR_USD  45   176.0 0.44
+   GBP_USD  45   964.0 0.47
+   USD_JPY  52 -1171.0 0.33
+   USD_CHF  45   314.0 0.44
+   AUD_USD  38   372.0 0.42
+   USD_CAD  42  -960.0 0.31
+   NZD_USD  38  -259.0 0.39
+   XAU_USD  81  3322.0 0.56
+   XAG_USD  53   710.0 0.51
+   WTI_USD  43   594.0 0.44
+   BTC_USD  54  -157.0 0.39
+SPX500_USD 118 -2323.0 0.31
+NAS100_USD 127  1628.0 0.43
+  US30_USD 114  -999.0 0.36
+  DE30_EUR 108 -2031.0 0.32
+ UK100_GBP  62 -1490.0 0.32
+ JP225_USD  71 -2175.0 0.28
+       n     pnl    wr
+year                  
+2002  17  -316.0  0.35
+2003  64   -90.0  0.38
+2004  47  1310.0  0.47
+2005  74  -961.0  0.35
+2006  75 -1615.0  0.32
+2007  68  -324.0  0.37
+2008  55 -1565.0  0.29
+2009  37    -7.0  0.43
+2010  25  -641.0  0.32
+2011  32   239.0  0.44
+2012  19   333.0  0.53
+2013  46   174.0  0.41
+2014  36  -211.0  0.33
+2015  36 -1592.0  0.25
+2016  26  -214.0  0.42
+2017  53   -66.0  0.42
+2018  31  -701.0  0.29
+2019  24    11.0  0.38
+2020  33   350.0  0.39
+2021  49  -123.0  0.41
+2022  24    -3.0  0.42
+2023  23  -652.0  0.30
+2024  51   724.0  0.43
+2025  54   829.0  0.46
+2026  47   203.0  0.36
+positive years: 9/25
+positive quarters: 41/99 (41%), worst=-1150, best=1153, median=-53
+worst 5 quarters: 2007Q1:-1150, 2015Q2:-1049, 2008Q4:-1002, 2002Q3:-930, 2005Q1:-902
+EUR_USD     n_sig=  66 rand_mean=      335 p=0.208 -> PASS
+GBP_USD     n_sig=  78 rand_mean=     -133 p=0.688 -> PASS
+USD_JPY     n_sig=  69 rand_mean=       52 p=0.421 -> PASS
+USD_CHF     n_sig=  67 rand_mean=       -1 p=0.502 -> PASS
+AUD_USD     n_sig=  54 rand_mean=     -118 p=0.713 -> PASS
+USD_CAD     n_sig=  64 rand_mean=       60 p=0.402 -> PASS
+NZD_USD     n_sig=  53 rand_mean=    -1187 p=0.891 -> PASS
+XAU_USD     n_sig= 111 rand_mean=     -590 p=0.986 -> PASS
+XAG_USD     n_sig=  84 rand_mean=     -145 p=0.681 -> PASS
+WTI_USD     n_sig=  67 rand_mean=      -19 p=0.529 -> PASS
+BTC_USD     n_sig=  81 rand_mean=      530 p=0.038 -> FAIL
+SPX500_USD  n_sig= 185 rand_mean=    -1593 p=1.000 -> PASS
+NAS100_USD  n_sig= 193 rand_mean=     -637 p=0.965 -> PASS
+US30_USD    n_sig= 175 rand_mean=     -428 p=0.951 -> PASS
+DE30_EUR    n_sig= 172 rand_mean=     -180 p=0.697 -> PASS
+UK100_GBP   n_sig=  94 rand_mean=      -95 p=0.637 -> PASS
+JP225_USD   n_sig=  94 rand_mean=     -123 p=0.639 -> PASS
+random gate: 16/17 pairs pass (need all)
+
+=== retest_daily | base (84s) ===
+pooled:all                   n= 182 pnl=    -6254 pf= 0.54 wr=0.25 mdd=0.633 sharpe= -0.63 [ -0.65]
+pooled:indices               n=  97 pnl=    -3271 pf= 0.53 wr=0.27 mdd=0.337 sharpe= -0.53 [ -0.55]
+pooled:fx+metals             n=  85 pnl=    -2982 pf= 0.54 wr=0.22 mdd=0.313 sharpe= -0.42 [ -0.44]
+    symbol  n    pnl   wr
+   EUR_USD  5 -187.0 0.20
+   GBP_USD  8 -505.0 0.12
+   USD_JPY 15 -312.0 0.33
+   USD_CHF 10 -771.0 0.10
+   AUD_USD  8 -494.0 0.12
+   USD_CAD  5 -472.0 0.00
+   NZD_USD  4 -399.0 0.00
+   XAU_USD  9   22.0 0.33
+   XAG_USD  8   47.0 0.38
+   WTI_USD  2 -200.0 0.00
+   BTC_USD 12  190.0 0.33
+SPX500_USD 20 -738.0 0.30
+NAS100_USD 19 -679.0 0.26
+  US30_USD 18 -671.0 0.22
+  DE30_EUR  9 -291.0 0.22
+ UK100_GBP 15 -785.0 0.20
+ JP225_USD 16 -107.0 0.38
+       n     pnl    wr
+year                  
+2002   3    14.0  0.33
+2003  10  -407.0  0.20
+2004   5  -505.0  0.00
+2005  10 -1008.0  0.00
+2006  13  -635.0  0.23
+2007  11  -442.0  0.27
+2008   5    31.0  0.40
+2009   7  -155.0  0.29
+2010   4   473.0  0.75
+2011   3   -32.0  0.33
+2012   5  -227.0  0.20
+2013   6  -380.0  0.17
+2014  10  -462.0  0.20
+2015   7  -457.0  0.14
+2016   2   493.0  1.00
+2017   8   271.0  0.50
+2018  13 -1030.0  0.08
+2019   1  -101.0  0.00
+2020   9  -230.0  0.33
+2021  11  -241.0  0.27
+2022   4    96.0  0.50
+2023   4   174.0  0.50
+2024   8  -453.0  0.12
+2025  12  -516.0  0.25
+2026  11  -526.0  0.18
+positive years: 7/25
+positive quarters: 27/73 (37%), worst=-607, best=453, median=-101
+worst 5 quarters: 2005Q1:-607, 2006Q2:-496, 2018Q2:-484, 2003Q3:-414, 2013Q2:-413
+EUR_USD     n_sig=   5 rand_mean=      -27 p=0.628 -> PASS
+GBP_USD     n_sig=   9 rand_mean=     -113 p=0.881 -> PASS
+USD_JPY     n_sig=  15 rand_mean=     -233 p=0.989 -> PASS
+USD_CHF     n_sig=  11 rand_mean=     -169 p=0.954 -> PASS
+AUD_USD     n_sig=   8 rand_mean=      -90 p=0.913 -> PASS
+USD_CAD     n_sig=   7 rand_mean=      -78 p=0.814 -> PASS
+NZD_USD     n_sig=   5 rand_mean=      -28 p=0.645 -> PASS
+XAU_USD     n_sig=  10 rand_mean=     -191 p=0.980 -> PASS
+XAG_USD     n_sig=   9 rand_mean=      108 p=0.094 -> PASS
+WTI_USD     n_sig=   2 rand_mean=      -25 p=0.732 -> PASS
+BTC_USD     n_sig=  13 rand_mean=      -26 p=0.612 -> PASS
+SPX500_USD  n_sig=  20 rand_mean=      -10 p=0.531 -> PASS
+NAS100_USD  n_sig=  20 rand_mean=       90 p=0.199 -> PASS
+US30_USD    n_sig=  19 rand_mean=       29 p=0.393 -> PASS
+DE30_EUR    n_sig=   9 rand_mean=     -165 p=0.930 -> PASS
+UK100_GBP   n_sig=  16 rand_mean=     -224 p=0.974 -> PASS
+JP225_USD   n_sig=  16 rand_mean=     -180 p=0.962 -> PASS
+random gate: 17/17 pairs pass (need all)
