@@ -1,0 +1,41 @@
+
+=== donchian_50_20 | 71 instruments | window 2005-01-01 -> 2026 ===
+donchian_50_20 equity_index eq=   0.81x cagr= -0.9% vol= 7.2% sharpe=-0.09 mdd=-32.5% trades=  521 pf= 0.92 wr=0.34 yrs+=12/22 q+=38/88
+    legs: long 316 tr +0.347 | short 205 tr -0.462 | cost 0.035
+donchian_50_20 commodity   eq=   1.08x cagr=  0.1% vol= 1.1% sharpe= 0.05 mdd=-15.1% trades= 1244 pf= 1.08 wr=0.35 yrs+=10/22 q+=42/88
+    legs: long 657 tr +0.351 | short 587 tr -0.243 | cost 0.021
+donchian_50_20 fx          eq=   0.82x cagr= -0.9% vol= 4.5% sharpe=-0.18 mdd=-26.8% trades=  999 pf= 0.92 wr=0.35 yrs+= 9/22 q+=40/88
+    legs: long 499 tr -0.037 | short 500 tr -0.077 | cost 0.067
+donchian_50_20 crypto      eq=   1.86x cagr=  5.7% vol= 8.9% sharpe= 0.67 mdd=-21.7% trades=  348 pf= 1.93 wr=0.41 yrs+= 4/8 q+=16/32
+    legs: long 186 tr +0.893 | short 162 tr -0.221 | cost 0.005
+donchian_50_20 bond        eq=   0.74x cagr= -1.5% vol= 8.8% sharpe=-0.13 mdd=-40.5% trades=   77 pf= 0.89 wr=0.36 yrs+= 8/20 q+=32/80
+    legs: long 42 tr -0.066 | short 35 tr -0.068 | cost 0.086
+donchian_50_20 us_stock    eq=   1.20x cagr=  0.8% vol= 3.7% sharpe= 0.24 mdd= -8.2% trades= 2127 pf= 1.16 wr=0.37 yrs+=13/22 q+=46/88
+    legs: long 1206 tr +0.582 | short 921 tr -0.366 | cost 0.021
+donchian_50_20 ALL 3bps    eq=   1.14x cagr=  0.1% vol= 0.7% sharpe= 0.10 mdd= -8.7% trades= 5316 pf= 1.13 wr=0.36 yrs+=12/22 q+=50/88
+donchian_50_20 ALL 6bps    eq=   1.11x cagr=  0.1% vol= 0.7% sharpe= 0.08 mdd= -9.0% trades= 5316 pf= 1.13 wr=0.36 yrs+=12/22 q+=49/88
+  2005:-1%  2006:+1%  2007:-1%  2008:+4%  2009:+1%  2010:+1%  2011:-1%  2012:+2%  2013:+1%  2014:-1%  2015:-1%  2016:-0%  2017:+3%  2018:+1%  2019:+1%  2020:+4%  2021:+6%  2022:-3%  2023:-0%  2024:+1%  2025:-0%  2026:-2%
+    gate: p=0.940 actual=+0.143 null_med=+0.254
+
+=== tsmom_252 | 71 instruments | window 2005-01-01 -> 2026 ===
+tsmom_252 equity_index     eq=   1.85x cagr=  2.8% vol= 8.4% sharpe= 0.37 mdd=-23.0% trades=  138 pf= 2.29 wr=0.41 yrs+=13/22 q+=48/88
+    legs: long 72 tr +0.946 | short 66 tr -0.245 | cost 0.009
+tsmom_252 commodity        eq=   1.07x cagr=  0.0% vol= 1.3% sharpe= 0.04 mdd=-25.7% trades=  530 pf= 1.09 wr=0.32 yrs+=11/22 q+=43/88
+    legs: long 270 tr +0.408 | short 260 tr -0.321 | cost 0.009
+tsmom_252 fx               eq=   1.20x cagr=  0.8% vol= 5.2% sharpe= 0.18 mdd=-15.1% trades=  389 pf= 1.32 wr=0.38 yrs+=12/22 q+=42/88
+    legs: long 195 tr +0.141 | short 194 tr +0.101 | cost 0.028
+tsmom_252 crypto           eq=   1.44x cagr=  3.3% vol= 9.7% sharpe= 0.38 mdd=-17.1% trades=  113 pf= 1.74 wr=0.38 yrs+= 3/8 q+=17/32
+    legs: long 56 tr +0.742 | short 57 tr -0.326 | cost 0.001
+tsmom_252 bond             eq=   0.80x cagr= -1.1% vol=10.9% sharpe=-0.05 mdd=-52.7% trades=   43 pf= 0.95 wr=0.37 yrs+=10/20 q+=38/80
+    legs: long 21 tr +0.089 | short 22 tr -0.141 | cost 0.053
+tsmom_252 us_stock         eq=   1.67x cagr=  2.4% vol= 4.4% sharpe= 0.56 mdd=-12.1% trades=  773 pf= 1.64 wr=0.36 yrs+=13/22 q+=56/88
+    legs: long 391 tr +0.956 | short 382 tr -0.412 | cost 0.008
+tsmom_252 ALL 3bps         eq=   1.44x cagr=  0.2% vol= 0.8% sharpe= 0.23 mdd= -8.1% trades= 1986 pf= 1.47 wr=0.36 yrs+=15/22 q+=53/88
+tsmom_252 ALL 6bps         eq=   1.42x cagr=  0.2% vol= 0.8% sharpe= 0.23 mdd= -8.1% trades= 1986 pf= 1.47 wr=0.36 yrs+=15/22 q+=53/88
+  2005:+0%  2006:+1%  2007:+4%  2008:+3%  2009:-3%  2010:+3%  2011:-3%  2012:+1%  2013:+7%  2014:+2%  2015:+2%  2016:-4%  2017:+6%  2018:-1%  2019:-1%  2020:+0%  2021:+12%  2022:+0%  2023:-1%  2024:+2%  2025:+5%  2026:+1%
+    gate: p=0.811 actual=+0.371 null_med=+0.426
+
+=== sma200_longonly | 33 instruments | equity indices + US stocks ===
+sma200 eq+stk              eq=   8.52x cagr=  5.0% vol= 6.0% sharpe= 0.84 mdd=-20.2% trades= 2622 pf= 2.70 wr=0.22 yrs+=20/22 q+=60/88
+    exposure=64.8%
+    gate: p=0.866 actual=+2.210 null_med=+2.329

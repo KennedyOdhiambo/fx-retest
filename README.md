@@ -11,9 +11,12 @@ directly with history paging.
 survives out-of-sample.** The book trades too rarely to prove anything (29
 trades), every tuned configuration that looked strong in-sample failed the
 walk-forward, and two full structural rewrites (breakout-continuation, level
-fade, plus MTF-level retests) confirmed the finding. Details and numbers under
-[Findings](#findings). The repo remains as an honest, fully-tested research
-base — see [Way forward](#way-forward).
+fade, plus MTF-level retests) confirmed the finding. Deeper history (24y
+daily) and a follow-up breadth program — trend/momentum, mean reversion,
+funding carry across 71 instruments in six asset classes — found no tradable
+directional edge either; the only surviving candidate is **delta-neutral
+crypto funding carry** (details in `research/README.md`). See
+[Findings](#findings) and [Way forward](#way-forward).
 
 ## Pipeline
 
@@ -133,14 +136,14 @@ out-of-sample. Raw evidence: `research/results/` (every config tried) and
 
 ## Way forward
 
-Only three levers aren't curve-fitting:
+The obvious levers have now been pulled: deeper history (24y daily), a much
+broader universe (71 instruments across six asset classes), and different
+hypothesis families (trend/momentum, mean reversion, XAU/XAG spread, funding
+carry) — all tested with the same discipline. No directional price edge
+survived. Full numbers: `research/README.md`.
 
-1. **More data** — H1 history is ~1.8 years; deeper H4/M5 pulls would let the
-   breakout family be judged across several regimes.
-2. **Different instruments** — current universe is FX majors + metals + BTC on
-   one venue.
-3. **A new hypothesis, not another knob** — e.g. whether an observable regime
-   condition separates the trending Q4-2025-style windows from the chop,
-   tested with the same out-of-sample discipline.
-
-Absent one of those, shelving the strategy is the rational move.
+The one candidate with persistent positive expectancy is **crypto funding
+carry** — hedged spot+perp harvester, ~8-10%/yr net of fees, Sharpe 6-8,
+positive in both split halves — a yield harvest rather than a price strategy,
+with real venue, margin and execution risks. It is the only thing found so
+far worth building around.

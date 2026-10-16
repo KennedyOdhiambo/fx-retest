@@ -1,0 +1,39 @@
+
+--- indices: 6 instruments ---
+mr_rsi5 indices            eq=   1.69x cagr=  2.4% vol= 7.4% sharpe= 0.35 mdd=-14.6% trades=  889 pf= 1.69 wr=0.72 yrs+=17/22 q+=68/88
+    exposure=9.8% cost=0.088
+mr_rsi10 indices           eq=   2.17x cagr=  3.5% vol= 9.8% sharpe= 0.40 mdd=-21.0% trades= 1571 pf= 1.58 wr=0.71 yrs+=17/22 q+=65/88
+    exposure=17.3% cost=0.156
+mr_rsi5_200 indices        eq=   1.39x cagr=  1.5% vol= 3.6% sharpe= 0.42 mdd= -9.0% trades=  512 pf= 1.89 wr=0.76 yrs+=16/22 q+=61/88
+    exposure=5.4% cost=0.051
+mr_rsi10_200 indices       eq=   1.53x cagr=  1.9% vol= 4.7% sharpe= 0.42 mdd=-11.1% trades=  991 pf= 1.62 wr=0.73 yrs+=16/22 q+=53/88
+    exposure=10.6% cost=0.099
+buyhold indices            eq=   6.60x cagr=  8.8% vol=18.3% sharpe= 0.55 mdd=-53.9% trades=    6 pf=  inf wr=1.00 yrs+=18/22 q+=61/88
+
+--- stocks: 27 instruments ---
+mr_rsi5 stocks             eq=   2.18x cagr=  3.6% vol= 6.2% sharpe= 0.61 mdd= -9.9% trades= 3993 pf= 1.56 wr=0.67 yrs+=21/22 q+=68/88
+    exposure=11.0% cost=0.088
+mr_rsi10 stocks            eq=   2.71x cagr=  4.7% vol= 8.5% sharpe= 0.58 mdd=-13.9% trades= 7052 pf= 1.42 wr=0.68 yrs+=20/22 q+=68/88
+    exposure=19.5% cost=0.156
+mr_rsi5_200 stocks         eq=   1.58x cagr=  2.1% vol= 2.8% sharpe= 0.78 mdd= -5.1% trades= 1975 pf= 1.80 wr=0.69 yrs+=20/22 q+=67/88
+    exposure=5.2% cost=0.044
+mr_rsi10_200 stocks        eq=   2.02x cagr=  3.3% vol= 4.1% sharpe= 0.81 mdd= -7.0% trades= 3891 pf= 1.63 wr=0.70 yrs+=21/22 q+=65/88
+    exposure=10.4% cost=0.086
+buyhold stocks             eq=  33.55x cagr= 17.5% vol=19.9% sharpe= 0.91 mdd=-47.1% trades=   27 pf=  inf wr=1.00 yrs+=20/22 q+=67/88
+
+--- all: 33 instruments ---
+mr_rsi5 all                eq=   2.11x cagr=  1.7% vol= 3.7% sharpe= 0.48 mdd= -9.8% trades= 4882 pf= 1.57 wr=0.68 yrs+=20/22 q+=70/88
+    exposure=10.8% cost=0.088
+mr_rsi10 all               eq=   2.68x cagr=  2.3% vol= 5.1% sharpe= 0.47 mdd=-13.9% trades= 8623 pf= 1.44 wr=0.68 yrs+=19/22 q+=66/88
+    exposure=19.1% cost=0.156
+mr_rsi5_200 all            eq=   1.55x cagr=  1.0% vol= 1.7% sharpe= 0.61 mdd= -5.2% trades= 2487 pf= 1.81 wr=0.71 yrs+=17/22 q+=69/88
+    exposure=5.2% cost=0.045
+mr_rsi10_200 all           eq=   1.93x cagr=  1.5% vol= 2.4% sharpe= 0.63 mdd= -6.8% trades= 4882 pf= 1.63 wr=0.71 yrs+=19/22 q+=65/88
+    exposure=10.4% cost=0.089
+buyhold all                eq=  28.16x cagr=  7.9% vol=11.7% sharpe= 0.71 mdd=-46.8% trades=   33 pf=  inf wr=1.00 yrs+=19/22 q+=64/88
+
+MR gate rsi5_200 all: p=0.005 actual=+0.441 null_med=+0.157
+/Users/kennedyodhiambo/Desktop/finance/retest/research/study_meanrev.py:82: Pandas4Warning: Sorting by default when concatenating all DatetimeIndex is deprecated.  In the future, pandas will respect the default of `sort=False`. Specify `sort=True` or `sort=False` to silence this message. If you see this warnings when not directly calling concat, report a bug to pandas.
+  pair = pd.concat({"xau": xau, "xag": xag}, axis=1).dropna()
+ratio_z60 XAU/XAG          eq=   0.54x cagr= -2.7% vol=20.4% sharpe=-0.03 mdd=-75.4% trades=  161 pf= 0.98 wr=0.70 yrs+=10/22 q+=45/88
+    ratio gate: p=0.507 actual=-0.110 null_med=-0.067
