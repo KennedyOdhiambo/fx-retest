@@ -1,0 +1,29 @@
+validating strat=breakout_h1 r_over={} bt_over={}
+--- full (12s) ---
+full:breakout_h1               n= 504 pnl=   4959.4 pf=  1.19 wr=0.41 mdd=0.109 sharpe=  1.01 [  0.92] psr=1.00
+    symbol  n         pnl       wr
+SPX500_USD 98 -945.961147 0.367347
+NAS100_USD 98 1044.050126 0.397959
+  US30_USD 69  635.084707 0.434783
+  DE30_EUR 62 2452.035232 0.500000
+ UK100_GBP 84 2157.365854 0.440476
+ JP225_USD 93 -383.190259 0.354839
+
+--- OOS last 25% (22s) ---
+oos:breakout_h1                n=  93 pnl=   -892.0 pf=  0.83 wr=0.37 mdd=0.111 sharpe= -1.12 [ -1.32] psr=0.00
+
+--- walk-forward (38s) ---
+2025-10-02: n=  68 pnl=   2970.7 wr=0.51
+2026-01-02: n=  62 pnl=   1045.3 wr=0.40
+2026-04-03: n=  66 pnl=   -591.1 wr=0.36
+2026-07-03: n=  39 pnl=   -538.5 wr=0.36
+wf-pooled:breakout_h1          n= 234 pnl=   2764.4 pf=  1.23 wr=0.41 mdd=0.096 sharpe=  1.39 [  1.25] psr=1.00
+
+--- random baseline (38s) ---
+SPX500_USD n_sig= 156 rand_mean= -2273.63 p=1.000 -> PASS
+NAS100_USD n_sig= 147 rand_mean=  -286.62 p=0.832 -> PASS
+US30_USD n_sig= 113 rand_mean=  -375.68 p=0.959 -> PASS
+DE30_EUR n_sig= 103 rand_mean=  -368.74 p=0.924 -> PASS
+UK100_GBP n_sig= 138 rand_mean= -1804.07 p=1.000 -> PASS
+JP225_USD n_sig= 153 rand_mean=  -795.67 p=0.982 -> PASS
+random gate: 6/6 pairs pass (need all)
