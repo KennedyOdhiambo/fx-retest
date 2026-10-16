@@ -100,6 +100,7 @@ backtest:
     DE30_EUR: 1.0
     UK100_GBP: 1.0
     JP225_USD: 1.0
+    FGBL: 0.01              # Euro-Bund future: 1 tick = 0.01
   risk_per_trade_pct: 1.0    # fixed-fractional risk per trade; one position at a time
   min_equity: 10000          # starting equity
   max_hold_bars: 120         # timeout exit, bars after entry
